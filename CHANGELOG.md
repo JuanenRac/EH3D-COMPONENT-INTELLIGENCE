@@ -3,6 +3,7 @@
 All notable changes to this project are documented here.
 
 ## [Unreleased]
+- **Shared checks updated:** the validator also compares the badge and the Version row of the README with the manifest, fails when one of its checks cannot run, and the CHANGELOG step of the workflow reads the base branch from the environment.
 
 - Add the library: components identified by manufacturer and part number, the observations of every field with how they were obtained and their source, page, table, revision and date, the confidence state, the pending fields, the origin and the licence of the data.
 - Find and report, with stable codes `PHOENIX-CINT-001` to `PHOENIX-CINT-007`: duplicate identities, observations without a source, sources that disagree, records marked verified while something is pending, records without an origin, records without a licence and malformed records.
