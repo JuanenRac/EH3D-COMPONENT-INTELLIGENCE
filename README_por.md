@@ -6,7 +6,7 @@
 
 <p align="center"><a href="README.md">🇺🇸 English</a> | <a href="README_spa.md">🇪🇸 Español</a> | <a href="README_fra.md">🇫🇷 Français</a> | <a href="README_ita.md">🇮🇹 Italiano</a> | <a href="README_deu.md">🇩🇪 Deutsch</a> | <a href="README_zho.md">🇨🇳 中文</a> | <a href="README_jpn.md">🇯🇵 日本語</a> | 🇵🇹 <b>Português</b></p>
 
-### EH3D-COMPONENT-INTELLIGENCE: planeado como uma base de dados técnica de componentes eletrónicos com os seus metadados. Ainda sem código.
+### EH3D-COMPONENT-INTELLIGENCE: uma base de dados técnica de componentes eletrónicos em que cada valor diz de onde vem. Código inicial.
 
 <p align="center">
   <img src="https://img.shields.io/badge/License-GPL%203.0--or--later-blue.svg" alt="GPL 3.0 or later">
@@ -19,7 +19,7 @@
 
 ---
 
-**Verificação de honestidade - o que funciona hoje:** nada. EH3D-COMPONENT-INTELLIGENCE está apenas planeado: não tem código, nem testes próprios, e nunca foi executado. O que existe é a base que todo o repositório da suite leva, mais o âmbito, os requisitos, as dependências, o modelo de ameaças e as decisões escritos em `docs/`.
+**Verificação de honestidade - o que corre hoje:** uma biblioteca Rust e uma linha de comandos que leem uma base de dados JSON de componentes e encontram o que está errado: identidades duplicadas, observações sem fonte, fontes que discordam, registos marcados como verificados com algo pendente e registos sem origem ou licença registadas; recusam exportar dados sem licença. Tudo correu apenas com dados feitos pelos próprios testes. O que não existe: qualquer formato de importação, a ligação com os símbolos e pegadas da ferramenta de projeto e a escolha da forma de guardar a base.
 
 ---
 
@@ -46,14 +46,14 @@ Cada linha é uma parte deste repositório e a luz diz até onde chega hoje. É 
 | Área | Estado | O que significa aqui |
 |---|---|---|
 | Verificações do repositório | 🟡 | A verificação do repositório, a das imagens e os 3 testes da base correm na CI e passam. |
-| Testes | 🟠 | Só a base tem testes (3); o código do repositório terá os seus à medida que for escrito. |
+| Testes | 🟡 | Os 14 testes do código Rust e os 3 da base passam num computador. Usam apenas dados feitos pelos próprios testes. |
 | Hardware real | 🟠 | Não foi executado em nenhuma máquina nem placa: nada aqui foi experimentado em hardware. |
-| Função planeada | 🔴 | Por começar: nada da função planeada está escrito. |
-| Requisitos | 🔴 | Todos os requisitos estão apenas planeados: nenhum está implementado nem verificado. |
+| Função planeada | 🟠 | Escrito: o registo com identidade exata, a proveniência de cada observação, os conflitos, o estado de confiança, a origem e a licença. Por escrever: importadores, a ligação com símbolos e pegadas e as folhas de dados. |
+| Requisitos | 🟠 | Os 6 requisitos estão em protótipo: existem código e testes, só com dados feitos pelos testes; nenhum está validado. |
 
 ## 🎯 Visão geral
 
-* **Planeado:** EH3D-COMPONENT-INTELLIGENCE pretende ser uma base de dados técnica de componentes eletrónicos com os seus metadados. Está planeado como uma biblioteca sem janela, com interface de linha de comandos e, quando se aplicar, um tipo de tarefa do servidor. Nada disto existe ainda.
+* **O que existe:** uma biblioteca e uma linha de comandos, sem janela, que leem uma base de dados JSON de componentes, verificam-na (`check`), mostram um componente com todas as suas observações (`show`) e só a exportam se cada registo anotar a licença dos seus dados (`export`). **Planeado:** importadores, a ligação com os símbolos e pegadas da ferramenta de projeto e um tipo de tarefa do servidor.
 
 ## 🧩 Papel no EH3D
 
@@ -105,6 +105,8 @@ EH3D-COMPONENT-INTELLIGENCE/
 │   ├── NOT_YET.md RULES.md                      ideias para mais tarde e regras para escrever código
 │   └── adr/                                     os registos das decisões aceites
 ├── AGENTS.md                                    regras para quem altera o repositório
+├── src/                                         a biblioteca e a linha de comandos
+├── Cargo.toml  deny.toml                        pacote Rust e política das dependências
 ├── tools/                                       a verificação do repositório, os seus testes e as ferramentas das imagens
 ├── images/                                      banner e as imagens de Arquitetura e Estrutura do repositório
 ├── .github/                                     fluxos de CI e do painel, modelos de issues e pull requests
@@ -121,7 +123,7 @@ EH3D-COMPONENT-INTELLIGENCE/
 
 **Limites conhecidos hoje**
 
-* Apenas planeado: não há código, nada foi executado e nenhum requisito está implementado.
+* Código inicial: só correu com dados dos próprios testes; ainda não existem formato de importação, ligação com a ferramenta de projeto nem forma de armazenamento além do ficheiro JSON.
 
 **A seguir**
 

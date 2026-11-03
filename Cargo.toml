@@ -1,0 +1,26 @@
+[package]
+name = "eh3d-component-intelligence"
+version = "0.0.1"
+edition = "2021"
+rust-version = "1.88"
+description = "Technical database of electronic components in which every value says where it came from"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/JuanenRac/EH3D-COMPONENT-INTELLIGENCE"
+readme = "README.md"
+
+[lib]
+name = "eh3d_component_intelligence"
+path = "src/lib.rs"
+
+[[bin]]
+name = "eh3d-component-intelligence"
+path = "src/main.rs"
+
+[dependencies]
+# serde / serde_json: the database is plain JSON
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+
+[dev-dependencies]
+tempfile = "3"
