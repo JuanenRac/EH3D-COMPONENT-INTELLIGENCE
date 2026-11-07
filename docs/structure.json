@@ -90,6 +90,20 @@
           }
         },
         {
+          "name": "CSV_FORMAT.md  DATABASE_FORMAT.md",
+          "tree_name": "CSV_FORMAT.md DATABASE_FORMAT.md",
+          "desc": {
+            "en": "the file formats: the CSV to import and the JSON database",
+            "es": "los formatos de archivo: el CSV a importar y la base JSON",
+            "de": "die Dateiformate: das CSV zum Import und die JSON-Datenbank",
+            "fr": "les formats de fichier : le CSV à importer et la base JSON",
+            "it": "i formati di file: il CSV da importare e la base JSON",
+            "ja": "ファイル形式：取り込む CSV と JSON データベース",
+            "zh": "文件格式：要导入的 CSV 与 JSON 数据库",
+            "pt": "os formatos de ficheiro: o CSV a importar e a base JSON"
+          }
+        },
+        {
           "desc": {
             "en": "the accepted decision records",
             "es": "los registros de decisiones aceptadas",
@@ -154,6 +168,19 @@
             "pt": "a biblioteca e a linha de comandos"
           },
           "name": "src/"
+        },
+        {
+          "name": "examples/",
+          "desc": {
+            "en": "small CSV files and a settings file to try the commands",
+            "es": "archivos CSV pequeños y un archivo de ajustes para probar los comandos",
+            "de": "kleine CSV-Dateien und eine Einstellungsdatei zum Ausprobieren der Befehle",
+            "fr": "petits fichiers CSV et un fichier de réglages pour essayer les commandes",
+            "it": "piccoli file CSV e un file di impostazioni per provare i comandi",
+            "ja": "コマンドを試すための小さな CSV ファイルと設定ファイル",
+            "zh": "用于试用命令的小型 CSV 文件和设置文件",
+            "pt": "ficheiros CSV pequenos e um ficheiro de definições para experimentar os comandos"
+          }
         },
         {
           "desc": {

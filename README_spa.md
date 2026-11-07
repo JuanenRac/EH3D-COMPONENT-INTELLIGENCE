@@ -19,7 +19,7 @@
 
 ---
 
-**Comprobación de honestidad - lo que se ejecuta hoy:** una biblioteca de Rust y una línea de comandos que leen una base de datos JSON de componentes y encuentran lo que está mal: identidades duplicadas, observaciones sin fuente, fuentes que discrepan, registros marcados como verificados con algo pendiente y registros sin origen o licencia registrados; se niegan a exportar datos sin licencia. Todo se ha ejecutado solo con datos hechos por sus propias pruebas. Lo que no existe: ningún formato de importación, el enlace con los símbolos y huellas de la herramienta de diseño y la elección de cómo se almacena la base.
+**Comprobación de honestidad - lo que se ejecuta hoy:** una biblioteca de Rust y una línea de comandos que importan una lista de piezas desde un archivo CSV a una base de datos JSON guardada como archivo junto al proyecto (`import`, `check-csv`, `list`) y que encuentran lo que está mal en una base: identidades duplicadas, observaciones sin fuente, fuentes que discrepan, registros marcados como verificados con algo pendiente y registros sin origen o licencia registrados; se niegan a exportar datos sin licencia y nunca sustituyen un archivo existente sin una orden explícita. Todo se ha probado solo con datos hechos por sus propias pruebas y con los archivos pequeños de `examples/`. Lo que no existe: otros formatos de importación (solo el CSV de `docs/CSV_FORMAT.md`), fusionar una importación con una base existente y el enlace con los símbolos y huellas de la herramienta de diseño.
 
 ---
 
@@ -46,14 +46,14 @@ Cada línea es una parte de este repositorio y la luz dice hasta dónde llega ho
 | Área | Estado | Qué significa aquí |
 |---|---|---|
 | Comprobaciones del repositorio | 🟡 | La comprobación del repositorio, la de las imágenes y las 3 pruebas de la base se ejecutan en el CI y pasan. |
-| Pruebas | 🟡 | Las 14 pruebas del código Rust y las 3 de la base pasan en un ordenador. Usan solo datos hechos por las propias pruebas. |
+| Pruebas | 🟡 | Las 46 pruebas del código Rust y las 3 de la base las ejecuta el CI. Usan solo datos hechos por las propias pruebas y los archivos pequeños de `examples/`. |
 | Hardware real | 🟠 | No se ha ejecutado en ninguna máquina ni placa: nada de aquí se ha probado en hardware. |
-| Función planificada | 🟠 | Escrito: el registro con identidad exacta, la procedencia de cada observación, los conflictos, el estado de confianza, el origen y la licencia. Sin escribir: importadores, el enlace con símbolos y huellas y las hojas de datos. |
+| Función planificada | 🟠 | Escrito: el registro con identidad exacta, la procedencia de cada observación, los conflictos, el estado de confianza, el origen y la licencia, y la importación de una lista de piezas en CSV a un archivo JSON. Sin escribir: otros importadores, el enlace con símbolos y huellas y las hojas de datos. |
 | Requisitos | 🟠 | Los 6 requisitos están en prototipo: hay código y pruebas, solo con datos hechos por las pruebas; ninguno está validado. |
 
 ## 🎯 Resumen
 
-* **Lo que existe:** una biblioteca y una línea de comandos, sin ventana, que leen una base de datos JSON de componentes, la comprueban (`check`), muestran un componente con todas sus observaciones (`show`) y la exportan solo si cada registro anota la licencia de sus datos (`export`). **Planificado:** importadores, el enlace con los símbolos y huellas de la herramienta de diseño y un tipo de tarea del servidor.
+* **Lo que existe:** una biblioteca y una línea de comandos, sin ventana, que leen una base de datos JSON de componentes, la comprueban (`check`), muestran un componente con todas sus observaciones (`show`), listan los componentes (`list`) y solo la exportan si cada registro anota la licencia de sus datos (`export`); también leen una lista de piezas en CSV a un archivo de base nuevo (`import`, con `check-csv` para comprobar solo el archivo) y nunca sustituyen un archivo existente sin una orden explícita. **Previsto:** otros importadores, el enlace con los símbolos y huellas de la herramienta de diseño y un tipo de tarea del servidor.
 
 ## 🧩 Papel en EH3D
 
@@ -103,9 +103,11 @@ EH3D-COMPONENT-INTELLIGENCE/
 │   ├── DEPENDENCIES.md THREAT_MODEL.md          relaciones con otros repositorios y modelo de amenazas
 │   ├── DECISIONS.md STATUS.md                   decisiones que se aplican aquí y estado honesto
 │   ├── NOT_YET.md RULES.md                      ideas para más adelante y reglas para escribir código
+│   ├── CSV_FORMAT.md DATABASE_FORMAT.md         los formatos de archivo: el CSV a importar y la base JSON
 │   └── adr/                                     los registros de decisiones aceptadas
 ├── AGENTS.md                                    reglas para quien cambia el repositorio
 ├── src/                                         la biblioteca y la línea de comandos
+├── examples/                                    archivos CSV pequeños y un archivo de ajustes para probar los comandos
 ├── Cargo.toml Cargo.lock deny.toml              paquete de Rust y política de dependencias
 ├── tools/                                       la comprobación del repositorio, sus pruebas y las herramientas de las imágenes
 ├── images/                                      banner y las imágenes de Arquitectura y Estructura del repositorio
@@ -123,7 +125,7 @@ EH3D-COMPONENT-INTELLIGENCE/
 
 **Límites conocidos hoy**
 
-* Código inicial: solo se ha ejecutado con datos hechos por sus propias pruebas; aún no existen formato de importación, enlace con la herramienta de diseño ni forma de almacenamiento más allá del fichero JSON.
+* Código inicial: solo se ha probado con datos de sus propias pruebas y con los archivos pequeños de `examples/`; el único formato de importación es la lista de piezas en CSV, una importación no se puede fusionar con una base existente y no hay enlace con la herramienta de diseño.
 
 **Siguiente**
 

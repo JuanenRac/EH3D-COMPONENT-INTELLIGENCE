@@ -4,6 +4,15 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **Import of a CSV list of parts:** the new `import` command makes a database file from a CSV with the fixed columns `reference`, `value`, `package`, `manufacturer`, `mpn` and `datasheet`; a mandatory header, a configurable separator, quotes, UTF-8 with or without a byte order mark and LF or CRLF lines are accepted. The format is written in `docs/CSV_FORMAT.md`.
+- **One component per part:** lines with the same manufacturer and part number become one component that lists all its references; the origin is the file, the observations are transcribed from it, the licence is never invented, and two different values for the same field stay side by side so that `check` reports the conflict.
+- **Bounded, strict reading with stable refusals:** the CSV reader limits bytes, rows, columns, the length of a field and the number of problems listed, all in the settings file, and refuses a bad file as a whole with the codes `EH3D-CINT-101` to `EH3D-CINT-113` and the line of each problem; nothing is written when anything is wrong.
+- **New commands `check-csv` and `list`:** `check-csv` reads a CSV and reports every problem without writing anything; `list` prints one line per component with its status and references.
+- **Safe writing of the database file:** the file is a plain JSON file next to the project in a stable form (sorted, two-space indentation, final line feed), written whole to a temporary file and then put in place; an existing file is never replaced without `--overwrite` (`EH3D-CINT-112`). The format is written in `docs/DATABASE_FORMAT.md`.
+- **Settings file with an example that cannot drift:** `Config::default_file()` gives the text of the settings with every default, and `examples/settings.cfg` is checked to be exactly that text; `.cfg` and `.csv` files keep their line endings (`-text`).
+- **Examples and tests:** three small CSV files (plain, with quotes, empty fields, a byte order mark and CRLF lines, and with a semicolon separator) and 32 new tests with hand-computed values: quotes, empty fields, duplicate references, byte order mark, line endings, every limit, the header, the canonical form, refusal to overwrite and the exit codes of the commands.
+- **Documentation brought up to date:** the README files in eight languages, `STATUS`, `NOT_YET`, `REQUIREMENTS`, `DECISIONS` (storage in files, CSV as the first import), `THREAT_MODEL`, and the architecture and structure pictures describe what the code now does.
+
 ## [0.0.2] - First release: the library, the command line, the stable error codes and the tests
 
 - **Brand:** Add the application icon and the logos of the program.

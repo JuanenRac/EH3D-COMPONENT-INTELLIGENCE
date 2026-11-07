@@ -19,7 +19,7 @@
 
 ---
 
-**Vérification d'honnêteté - ce qui tourne aujourd'hui :** une bibliothèque Rust et une ligne de commande qui lisent une base JSON de composants et trouvent ce qui ne va pas : identités en double, observations sans source, sources qui divergent, fiches marquées vérifiées alors que quelque chose reste en attente, fiches sans origine ni licence enregistrées ; elles refusent d'exporter des données sans licence. Tout n'a tourné que sur des données faites par ses propres tests. N'existent pas : aucun format d'import, le lien avec les symboles et empreintes de l'outil de conception et le choix du mode de stockage.
+**Vérification d'honnêteté - ce qui tourne aujourd'hui :** une bibliothèque Rust et une ligne de commande qui importent une liste de pièces depuis un fichier CSV vers une base JSON conservée comme fichier à côté du projet (`import`, `check-csv`, `list`) et qui trouvent ce qui ne va pas dans une base : identités en double, observations sans source, sources qui divergent, fiches marquées vérifiées alors que quelque chose reste en attente, fiches sans origine ni licence enregistrées ; elles refusent d'exporter des données sans licence et ne remplacent jamais un fichier existant sans ordre explicite. Tout n'est testé que sur des données faites par ses propres tests et sur les petits fichiers de `examples/`. N'existent pas : d'autres formats d'import (seulement le CSV de `docs/CSV_FORMAT.md`), la fusion d'un import dans une base existante et le lien avec les symboles et empreintes de l'outil de conception.
 
 ---
 
@@ -46,14 +46,14 @@ Chaque ligne est une partie de ce dépôt et le feu dit où elle en est aujourd'
 | Domaine | État | Ce que cela veut dire ici |
 |---|---|---|
 | Contrôles du dépôt | 🟡 | Le contrôle du dépôt, celui des images et les 3 tests de la base tournent dans la CI et réussissent. |
-| Tests | 🟡 | Les 14 tests du code Rust et les 3 de la base réussissent sur un ordinateur. Ils n'utilisent que des données faites par les tests eux-mêmes. |
+| Tests | 🟡 | Les 46 tests du code Rust et les 3 de la base sont exécutés par la CI. Ils n'utilisent que des données faites par les tests eux-mêmes et les petits fichiers de `examples/`. |
 | Matériel réel | 🟠 | Non exécuté sur une machine ni une carte : rien ici n'a été essayé sur du matériel. |
-| Fonction prévue | 🟠 | Écrit : la fiche à identité exacte, la provenance de chaque observation, les conflits, l'état de confiance, l'origine et la licence. Non écrit : les importeurs, le lien avec symboles et empreintes et les fiches techniques. |
+| Fonction prévue | 🟠 | Écrit : la fiche à identité exacte, la provenance de chaque observation, les conflits, l'état de confiance, l'origine et la licence, et l'import d'une liste de pièces CSV vers un fichier JSON. Non écrit : d'autres importeurs, le lien avec symboles et empreintes et les fiches techniques. |
 | Exigences | 🟠 | Les 6 exigences sont au stade de prototype : le code et les tests existent, seulement sur des données faites par les tests ; aucune n'est validée. |
 
 ## 🎯 Présentation
 
-* **Ce qui existe :** une bibliothèque et une ligne de commande, sans fenêtre, qui lisent une base JSON de composants, la contrôlent (`check`), affichent un composant avec toutes ses observations (`show`) et ne l'exportent que si chaque fiche note la licence de ses données (`export`). **Prévu :** des importeurs, le lien avec les symboles et empreintes de l'outil de conception et un type de tâche du serveur.
+* **Ce qui existe :** une bibliothèque et une ligne de commande, sans fenêtre, qui lisent une base JSON de composants, la contrôlent (`check`), affichent un composant avec toutes ses observations (`show`), listent les composants (`list`) et ne l'exportent que si chaque fiche note la licence de ses données (`export`) ; elles lisent aussi une liste de pièces CSV vers un nouveau fichier de base (`import`, avec `check-csv` pour ne contrôler que le fichier) et ne remplacent jamais un fichier existant sans ordre explicite. **Prévu :** d'autres importeurs, le lien avec les symboles et empreintes de l'outil de conception et un type de tâche du serveur.
 
 ## 🧩 Rôle dans EH3D
 
@@ -103,9 +103,11 @@ EH3D-COMPONENT-INTELLIGENCE/
 │   ├── DEPENDENCIES.md THREAT_MODEL.md          relations avec d'autres dépôts et modèle de menaces
 │   ├── DECISIONS.md STATUS.md                   décisions applicables ici et état honnête
 │   ├── NOT_YET.md RULES.md                      idées pour plus tard et règles d'écriture du code
+│   ├── CSV_FORMAT.md DATABASE_FORMAT.md         les formats de fichier : le CSV à importer et la base JSON
 │   └── adr/                                     les décisions acceptées
 ├── AGENTS.md                                    règles pour quiconque modifie le dépôt
 ├── src/                                         la bibliothèque et la ligne de commande
+├── examples/                                    petits fichiers CSV et un fichier de réglages pour essayer les commandes
 ├── Cargo.toml Cargo.lock deny.toml              paquet Rust et politique des dépendances
 ├── tools/                                       le contrôle du dépôt, ses tests et les outils des images
 ├── images/                                      bannière et images d'Architecture et de Structure du dépôt
@@ -123,7 +125,7 @@ EH3D-COMPONENT-INTELLIGENCE/
 
 **Limites connues aujourd'hui**
 
-* Code initial : n'a tourné que sur des données de ses propres tests ; il n'existe encore ni format d'import, ni lien avec l'outil de conception, ni mode de stockage au-delà du fichier JSON.
+* Code initial : testé seulement sur des données de ses propres tests et sur les petits fichiers de `examples/` ; le seul format d'import est la liste de pièces CSV, un import ne peut pas être fusionné dans une base existante et il n'y a aucun lien avec l'outil de conception.
 
 **Ensuite**
 

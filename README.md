@@ -19,7 +19,7 @@
 
 ---
 
-**Honesty check - what actually runs today:** a Rust library and a command line that read a JSON database of components and find what is wrong with it: duplicate identities, observations without a source, sources that disagree, records marked verified while something is pending, and records without a recorded origin or licence; they refuse to export data without a licence. All of it has run only on data made by its own tests. What does not exist: any import format, the link with the symbols and footprints of the design tool, and the choice of how the database is stored.
+**Honesty check - what actually runs today:** a Rust library and a command line that import a list of parts from a CSV file into a JSON database kept as a file next to the project (`import`, `check-csv`, `list`) and that find what is wrong with a database: duplicate identities, observations without a source, sources that disagree, records marked verified while something is pending, and records without a recorded origin or licence; they refuse to export data without a licence and never replace an existing file without an explicit order. All of it is tested only with data made by its own tests and with the small files of `examples/`. What does not exist: other import formats (only the CSV of `docs/CSV_FORMAT.md`), merging an import into an existing database, and the link with the symbols and footprints of the design tool.
 
 ---
 
@@ -46,14 +46,14 @@ Each line is one part of this repository and the light says how far it is today.
 | Area | State | What it means here |
 |---|---|---|
 | Repository checks | 🟡 | The repository check, the check of the pictures and the 3 tests of the base run in CI and pass. |
-| Tests | 🟡 | 14 tests of the Rust code and the 3 of the base pass on a computer. They use only data made by the tests themselves. |
+| Tests | 🟡 | 46 tests of the Rust code and the 3 of the base are run by the CI. They use only data made by the tests themselves and the small files of `examples/`. |
 | Real hardware | 🟠 | Not run on any machine or board: nothing here has been tried on hardware. |
-| Planned function | 🟠 | Written: the record with exact identity, provenance of every observation, conflicts, confidence state, origin and licence. Not written: importers, the link with symbols and footprints, and the data sheets. |
+| Planned function | 🟠 | Written: the record with exact identity, provenance of every observation, conflicts, confidence state, origin and licence, and the import of a CSV list of parts into a JSON file. Not written: other importers, the link with symbols and footprints, and the data sheets. |
 | Requirements | 🟠 | The 6 requirements are at prototype: code and tests exist, only on data made by the tests; none is validated. |
 
 ## 🎯 Overview
 
-* **What exists:** a library and a command line, without a window, that read a JSON database of components, check it (`check`), print one component with all its observations (`show`) and export it only when every record records the licence of its data (`export`). **Planned:** importers, the link with the symbols and footprints of the design tool, and a kind of server task.
+* **What exists:** a library and a command line, without a window, that read a JSON database of components, check it (`check`), print one component with all its observations (`show`), list the components (`list`) and export it only when every record records the licence of its data (`export`); they also read a CSV list of parts into a new database file (`import`, with `check-csv` to only check the file) and never replace an existing file without an explicit order. **Planned:** other importers, the link with the symbols and footprints of the design tool, and a kind of server task.
 
 ## 🧩 Role in EH3D
 
@@ -103,9 +103,11 @@ EH3D-COMPONENT-INTELLIGENCE/
 │   ├── DEPENDENCIES.md THREAT_MODEL.md          relations with other repositories and the threat model
 │   ├── DECISIONS.md STATUS.md                   decisions that apply here and the honest status
 │   ├── NOT_YET.md RULES.md                      ideas left for later and rules for writing code
+│   ├── CSV_FORMAT.md DATABASE_FORMAT.md         the file formats: the CSV to import and the JSON database
 │   └── adr/                                     the accepted decision records
 ├── AGENTS.md                                    rules for anyone who changes the repository
 ├── src/                                         the library and the command line
+├── examples/                                    small CSV files and a settings file to try the commands
 ├── Cargo.toml Cargo.lock deny.toml              Rust package and policy of the dependencies
 ├── tools/                                       the repository check, its tests and the picture tools
 ├── images/                                      banner and the Architecture and Repository Structure pictures
@@ -123,7 +125,7 @@ EH3D-COMPONENT-INTELLIGENCE/
 
 **Known limits today**
 
-* Early code: it has only run on data made by its own tests; no import format, no link with the design tool and no storage form beyond the JSON file exist yet.
+* Early code: it is tested only with data made by its own tests and the small files of `examples/`; the only import format is the CSV list of parts, an import cannot be merged into an existing database, and there is no link with the design tool.
 
 **Next**
 

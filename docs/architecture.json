@@ -1,8 +1,8 @@
 {
   "repo": "EH3D-COMPONENT-INTELLIGENCE",
   "ecosystem": "eh3d",
-  "tagline": "Planned: a technical component database where every datum says where it came from.",
-  "description": "EH3D-COMPONENT-INTELLIGENCE is planned as a technical database of electronic components with their metadata. Today it has the base of every repository of the suite and a written scope, requirements and dependencies; no code has been written and nothing has been run on a machine.",
+  "tagline": "A component database where every value says where it came from. Early code.",
+  "description": "EH3D-COMPONENT-INTELLIGENCE is a Rust library and command line. A person runs the commands on a CSV list of parts; the import turns it into a JSON database kept as a file next to the project, the checks find what is wrong with it, and the writer never replaces an existing file without an explicit order. It has only run on data made by its own tests and on small example files.",
   "columns": [
     "WHO USES IT",
     "THIS REPOSITORY",
@@ -13,10 +13,20 @@
       "id": "reader",
       "column": 0,
       "level": "external",
-      "title": "A developer",
+      "title": "A person",
       "lines": [
-        "someone who is going to give",
-        "this repository its purpose"
+        "runs the commands on a CSV",
+        "list of parts or a database"
+      ]
+    },
+    {
+      "id": "csv",
+      "column": 0,
+      "level": "external",
+      "title": "A CSV list of parts",
+      "lines": [
+        "six fixed columns, see",
+        "docs/CSV_FORMAT.md"
       ]
     },
     {
@@ -34,13 +44,57 @@
       ]
     },
     {
-      "id": "code",
+      "id": "cli",
       "column": 1,
       "level": "config",
-      "title": "The code",
+      "title": "The commands",
       "lines": [
-        "planned: technical data",
-        "of electronic components"
+        "check, show, export, list,",
+        "check-csv and import"
+      ],
+      "code": [
+        "src/cli.rs::check-csv"
+      ]
+    },
+    {
+      "id": "db",
+      "column": 1,
+      "level": "config",
+      "title": "The database",
+      "lines": [
+        "provenance, conflicts, licence,",
+        "settings file with the limits"
+      ],
+      "code": [
+        "src/database.rs",
+        "src/config.rs"
+      ]
+    },
+    {
+      "id": "import",
+      "column": 1,
+      "level": "config",
+      "title": "The import",
+      "lines": [
+        "strict bounded CSV reader,",
+        "one component per part"
+      ],
+      "code": [
+        "src/csv.rs",
+        "src/import.rs"
+      ]
+    },
+    {
+      "id": "store",
+      "column": 1,
+      "level": "config",
+      "title": "Safe writing",
+      "lines": [
+        "temporary file, then in place;",
+        "never replaces without an order"
+      ],
+      "code": [
+        "src/store.rs"
       ]
     },
     {
@@ -57,6 +111,33 @@
   "edges": [
     {
       "from": "reader",
+      "to": "cli",
+      "label": "runs",
+      "level": "config"
+    },
+    {
+      "from": "csv",
+      "to": "import",
+      "label": "is read by",
+      "level": "config"
+    },
+    {
+      "from": "cli",
+      "to": "import",
+      "level": "config"
+    },
+    {
+      "from": "import",
+      "to": "db",
+      "level": "config"
+    },
+    {
+      "from": "db",
+      "to": "store",
+      "level": "config"
+    },
+    {
+      "from": "reader",
       "to": "base",
       "label": "starts from",
       "level": "tested"
@@ -66,18 +147,12 @@
       "to": "suite",
       "label": "follows",
       "level": "tested"
-    },
-    {
-      "from": "reader",
-      "to": "code",
-      "label": "writes",
-      "level": "config"
     }
   ],
   "legend": {
     "tested": "covered by the checks of this repository",
-    "config": "planned, not built",
-    "external": "a person or other repositories"
+    "config": "written and tested only on data made by the tests",
+    "external": "a person, a file or other repositories"
   },
-  "footer": "Nothing here has been run on a machine."
+  "footer": "Nothing here has been run on real data."
 }

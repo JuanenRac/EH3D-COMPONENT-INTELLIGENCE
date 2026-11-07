@@ -19,7 +19,7 @@
 
 ---
 
-**Ehrlichkeitscheck - was heute tatsächlich läuft:** eine Rust-Bibliothek und eine Befehlszeile, die eine JSON-Datenbank von Bauteilen lesen und finden, was daran falsch ist: doppelte Identitäten, Beobachtungen ohne Quelle, Quellen, die sich widersprechen, als geprüft markierte Einträge mit offenen Punkten und Einträge ohne erfasste Herkunft oder Lizenz; Daten ohne Lizenz exportieren sie nicht. Alles lief nur mit Daten, die die eigenen Tests erzeugen. Es fehlen: jedes Importformat, die Verbindung zu Symbolen und Footprints des Entwurfswerkzeugs und die Wahl der Speicherform.
+**Ehrlichkeitscheck - was heute tatsächlich läuft:** eine Rust-Bibliothek und eine Befehlszeile, die eine Liste von Teilen aus einer CSV-Datei in eine JSON-Datenbank importieren, die als Datei neben dem Projekt liegt (`import`, `check-csv`, `list`), und die finden, was an einer Datenbank falsch ist: doppelte Identitäten, Beobachtungen ohne Quelle, Quellen, die sich widersprechen, als geprüft markierte Einträge mit offenen Punkten und Einträge ohne erfasste Herkunft oder Lizenz; Daten ohne Lizenz exportieren sie nicht, und eine vorhandene Datei ersetzen sie nie ohne ausdrücklichen Befehl. Alles ist nur mit Daten getestet, die die eigenen Tests erzeugen, und mit den kleinen Dateien in `examples/`. Es fehlen: andere Importformate (nur das CSV aus `docs/CSV_FORMAT.md`), das Zusammenführen eines Imports mit einer bestehenden Datenbank und die Verbindung zu Symbolen und Footprints des Entwurfswerkzeugs.
 
 ---
 
@@ -46,14 +46,14 @@ Jede Zeile ist ein Teil dieses Repositorys, und die Ampel sagt, wie weit er heut
 | Bereich | Stand | Was das hier bedeutet |
 |---|---|---|
 | Repository-Prüfungen | 🟡 | Die Repository-Prüfung, die Prüfung der Bilder und die 3 Tests der Basis laufen in der CI und bestehen. |
-| Tests | 🟡 | Die 14 Tests des Rust-Codes und die 3 der Basis bestehen auf einem Rechner. Sie verwenden nur Daten, die die Tests selbst erzeugen. |
+| Tests | 🟡 | Die 46 Tests des Rust-Codes und die 3 der Basis führt die CI aus. Sie verwenden nur Daten, die die Tests selbst erzeugen, und die kleinen Dateien in `examples/`. |
 | Echte Hardware | 🟠 | Auf keiner Maschine und keiner Platine ausgeführt: nichts hier wurde auf Hardware ausprobiert. |
-| Geplante Funktion | 🟠 | Geschrieben: der Eintrag mit exakter Identität, die Herkunft jeder Beobachtung, Konflikte, Vertrauensstatus, Herkunft und Lizenz. Nicht geschrieben: Importer, die Verbindung zu Symbolen und Footprints und die Datenblätter. |
+| Geplante Funktion | 🟠 | Geschrieben: der Eintrag mit exakter Identität, die Herkunft jeder Beobachtung, Konflikte, Vertrauensstatus, Herkunft und Lizenz sowie der Import einer CSV-Teileliste in eine JSON-Datei. Nicht geschrieben: andere Importer, die Verbindung zu Symbolen und Footprints und die Datenblätter. |
 | Anforderungen | 🟠 | Die 6 Anforderungen sind im Prototyp: Code und Tests existieren, nur mit von den Tests erzeugten Daten; keine ist validiert. |
 
 ## 🎯 Überblick
 
-* **Was es gibt:** eine Bibliothek und eine Befehlszeile ohne Fenster, die eine JSON-Datenbank von Bauteilen lesen, prüfen (`check`), ein Bauteil mit allen Beobachtungen ausgeben (`show`) und nur dann exportieren, wenn jeder Eintrag die Lizenz seiner Daten vermerkt (`export`). **Geplant:** Importer, die Verbindung zu Symbolen und Footprints des Entwurfswerkzeugs und eine Art Serveraufgabe.
+* **Was es gibt:** eine Bibliothek und eine Befehlszeile ohne Fenster, die eine JSON-Datenbank von Bauteilen lesen, prüfen (`check`), ein Bauteil mit allen Beobachtungen anzeigen (`show`), die Bauteile auflisten (`list`) und nur dann exportieren, wenn jeder Eintrag die Lizenz seiner Daten vermerkt (`export`); außerdem lesen sie eine CSV-Teileliste in eine neue Datenbankdatei ein (`import`, mit `check-csv`, um nur die Datei zu prüfen) und ersetzen nie eine vorhandene Datei ohne ausdrücklichen Befehl. **Geplant:** andere Importer, die Verbindung zu Symbolen und Footprints des Entwurfswerkzeugs und eine Art Server-Aufgabe.
 
 ## 🧩 Rolle in EH3D
 
@@ -103,9 +103,11 @@ EH3D-COMPONENT-INTELLIGENCE/
 │   ├── DEPENDENCIES.md THREAT_MODEL.md          Beziehungen zu anderen Repositories und Bedrohungsmodell
 │   ├── DECISIONS.md STATUS.md                   hier geltende Entscheidungen und ehrlicher Status
 │   ├── NOT_YET.md RULES.md                      Ideen für später und Regeln zum Schreiben von Code
+│   ├── CSV_FORMAT.md DATABASE_FORMAT.md         die Dateiformate: das CSV zum Import und die JSON-Datenbank
 │   └── adr/                                     die angenommenen Entscheidungsprotokolle
 ├── AGENTS.md                                    Regeln für alle, die das Repository ändern
 ├── src/                                         die Bibliothek und die Befehlszeile
+├── examples/                                    kleine CSV-Dateien und eine Einstellungsdatei zum Ausprobieren der Befehle
 ├── Cargo.toml Cargo.lock deny.toml              Rust-Paket und Richtlinie der Abhängigkeiten
 ├── tools/                                       die Repository-Prüfung, ihre Tests und die Bild-Werkzeuge
 ├── images/                                      Banner und die Bilder von Architektur und Repository-Struktur
@@ -123,7 +125,7 @@ EH3D-COMPONENT-INTELLIGENCE/
 
 **Bekannte Grenzen heute**
 
-* Früher Code: nur mit Daten der eigenen Tests ausgeführt; es gibt noch kein Importformat, keine Verbindung zum Entwurfswerkzeug und keine Speicherform außer der JSON-Datei.
+* Früher Code: nur mit Daten der eigenen Tests und den kleinen Dateien in `examples/` getestet; als Importformat gibt es nur die CSV-Teileliste, ein Import lässt sich nicht mit einer bestehenden Datenbank zusammenführen, und es gibt keine Verbindung zum Entwurfswerkzeug.
 
 **Als Nächstes**
 

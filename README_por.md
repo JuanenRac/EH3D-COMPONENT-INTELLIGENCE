@@ -19,7 +19,7 @@
 
 ---
 
-**Verificação de honestidade - o que corre hoje:** uma biblioteca Rust e uma linha de comandos que leem uma base de dados JSON de componentes e encontram o que está errado: identidades duplicadas, observações sem fonte, fontes que discordam, registos marcados como verificados com algo pendente e registos sem origem ou licença registadas; recusam exportar dados sem licença. Tudo correu apenas com dados feitos pelos próprios testes. O que não existe: qualquer formato de importação, a ligação com os símbolos e pegadas da ferramenta de projeto e a escolha da forma de guardar a base.
+**Verificação de honestidade - o que corre hoje:** uma biblioteca Rust e uma linha de comandos que importam uma lista de peças de um ficheiro CSV para uma base de dados JSON guardada como ficheiro junto do projeto (`import`, `check-csv`, `list`) e que encontram o que está errado numa base: identidades duplicadas, observações sem fonte, fontes que discordam, registos marcados como verificados com algo pendente e registos sem origem ou licença registadas; recusam exportar dados sem licença e nunca substituem um ficheiro existente sem uma ordem explícita. Tudo foi testado apenas com dados feitos pelos próprios testes e com os ficheiros pequenos de `examples/`. O que não existe: outros formatos de importação (só o CSV de `docs/CSV_FORMAT.md`), juntar uma importação a uma base existente e a ligação com os símbolos e pegadas da ferramenta de projeto.
 
 ---
 
@@ -46,14 +46,14 @@ Cada linha é uma parte deste repositório e a luz diz até onde chega hoje. É 
 | Área | Estado | O que significa aqui |
 |---|---|---|
 | Verificações do repositório | 🟡 | A verificação do repositório, a das imagens e os 3 testes da base correm na CI e passam. |
-| Testes | 🟡 | Os 14 testes do código Rust e os 3 da base passam num computador. Usam apenas dados feitos pelos próprios testes. |
+| Testes | 🟡 | Os 46 testes do código Rust e os 3 da base são executados pelo CI. Usam apenas dados feitos pelos próprios testes e os ficheiros pequenos de `examples/`. |
 | Hardware real | 🟠 | Não foi executado em nenhuma máquina nem placa: nada aqui foi experimentado em hardware. |
-| Função planeada | 🟠 | Escrito: o registo com identidade exata, a proveniência de cada observação, os conflitos, o estado de confiança, a origem e a licença. Por escrever: importadores, a ligação com símbolos e pegadas e as folhas de dados. |
+| Função planeada | 🟠 | Escrito: o registo com identidade exata, a proveniência de cada observação, os conflitos, o estado de confiança, a origem e a licença, e a importação de uma lista de peças em CSV para um ficheiro JSON. Por escrever: outros importadores, a ligação com símbolos e pegadas e as folhas de dados. |
 | Requisitos | 🟠 | Os 6 requisitos estão em protótipo: existem código e testes, só com dados feitos pelos testes; nenhum está validado. |
 
 ## 🎯 Visão geral
 
-* **O que existe:** uma biblioteca e uma linha de comandos, sem janela, que leem uma base de dados JSON de componentes, verificam-na (`check`), mostram um componente com todas as suas observações (`show`) e só a exportam se cada registo anotar a licença dos seus dados (`export`). **Planeado:** importadores, a ligação com os símbolos e pegadas da ferramenta de projeto e um tipo de tarefa do servidor.
+* **O que existe:** uma biblioteca e uma linha de comandos, sem janela, que leem uma base de dados JSON de componentes, verificam-na (`check`), mostram um componente com todas as suas observações (`show`), listam os componentes (`list`) e só a exportam se cada registo anotar a licença dos seus dados (`export`); leem também uma lista de peças em CSV para um novo ficheiro de base (`import`, com `check-csv` para verificar apenas o ficheiro) e nunca substituem um ficheiro existente sem uma ordem explícita. **Planeado:** outros importadores, a ligação com os símbolos e pegadas da ferramenta de projeto e um tipo de tarefa do servidor.
 
 ## 🧩 Papel no EH3D
 
@@ -103,9 +103,11 @@ EH3D-COMPONENT-INTELLIGENCE/
 │   ├── DEPENDENCIES.md THREAT_MODEL.md          relações com outros repositórios e modelo de ameaças
 │   ├── DECISIONS.md STATUS.md                   decisões que se aplicam aqui e estado honesto
 │   ├── NOT_YET.md RULES.md                      ideias para mais tarde e regras para escrever código
+│   ├── CSV_FORMAT.md DATABASE_FORMAT.md         os formatos de ficheiro: o CSV a importar e a base JSON
 │   └── adr/                                     os registos das decisões aceites
 ├── AGENTS.md                                    regras para quem altera o repositório
 ├── src/                                         a biblioteca e a linha de comandos
+├── examples/                                    ficheiros CSV pequenos e um ficheiro de definições para experimentar os comandos
 ├── Cargo.toml Cargo.lock deny.toml              pacote Rust e política das dependências
 ├── tools/                                       a verificação do repositório, os seus testes e as ferramentas das imagens
 ├── images/                                      banner e as imagens de Arquitetura e Estrutura do repositório
@@ -123,7 +125,7 @@ EH3D-COMPONENT-INTELLIGENCE/
 
 **Limites conhecidos hoje**
 
-* Código inicial: só correu com dados dos próprios testes; ainda não existem formato de importação, ligação com a ferramenta de projeto nem forma de armazenamento além do ficheiro JSON.
+* Código inicial: só testado com dados dos próprios testes e com os ficheiros pequenos de `examples/`; o único formato de importação é a lista de peças em CSV, uma importação não se pode juntar a uma base existente e não há ligação com a ferramenta de projeto.
 
 **A seguir**
 
