@@ -1,6 +1,6 @@
 [package]
 name = "eh3d-component-intelligence"
-version = "0.0.2"
+version = "0.0.3"
 edition = "2021"
 rust-version = "1.88"
 description = "Technical database of electronic components in which every value says where it came from"

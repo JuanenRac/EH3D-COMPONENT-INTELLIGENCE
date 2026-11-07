@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+## [0.0.3] - Import of components from a CSV file stored in the project and the safe write of the database
+
 - **Import of a CSV list of parts:** the new `import` command makes a database file from a CSV with the fixed columns `reference`, `value`, `package`, `manufacturer`, `mpn` and `datasheet`; a mandatory header, a configurable separator, quotes, UTF-8 with or without a byte order mark and LF or CRLF lines are accepted. The format is written in `docs/CSV_FORMAT.md`.
 - **One component per part:** lines with the same manufacturer and part number become one component that lists all its references; the origin is the file, the observations are transcribed from it, the licence is never invented, and two different values for the same field stay side by side so that `check` reports the conflict.
 - **Bounded, strict reading with stable refusals:** the CSV reader limits bytes, rows, columns, the length of a field and the number of problems listed, all in the settings file, and refuses a bad file as a whole with the codes `EH3D-CINT-101` to `EH3D-CINT-113` and the line of each problem; nothing is written when anything is wrong.
