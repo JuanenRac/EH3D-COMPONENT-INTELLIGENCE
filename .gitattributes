@@ -5,3 +5,7 @@
 *.sh text eol=lf
 *.bat text eol=crlf
 *.cmd text eol=crlf
+
+# Example files keep their line endings and byte order mark exactly as written.
+*.cfg -text
+*.csv -text
