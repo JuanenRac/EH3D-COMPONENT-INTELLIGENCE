@@ -5,7 +5,7 @@
 //! **observations** of each field (a value, how it was obtained, and the source, page, table, revision and date it was consulted), finds what is wrong with
 //! them and refuses to call a record verified while something is pending.
 //!
-//! Findings carry stable codes `PHOENIX-CINT-NNN` (see [`Code`]). The database is plain JSON and is checked, never repaired: a record is changed by a person.
+//! Findings carry stable codes `PHOENIX-CINT-NNN` (see [`Code`]); the refusals of the import and of the writing of a file carry `EH3D-CINT-NNN` (see [`ImportCode`]). The database is plain JSON and is checked, never repaired: a record is changed by a person.
 //!
 //! Dates are text supplied by the person who fills the database; this crate never reads the clock, so the same file always gives the same findings.
 #![forbid(unsafe_code)]
@@ -13,11 +13,16 @@
 
 pub mod cli;
 pub mod config;
+pub mod csv;
 pub mod database;
 pub mod error;
+pub mod import;
+pub mod issue;
+pub mod store;
 
 pub use database::{Component, Database, Finding, Observation};
 pub use error::CintError;
+pub use issue::{ImportCode, Issue};
 
 /// The stable code of a finding. Codes are never reused.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]

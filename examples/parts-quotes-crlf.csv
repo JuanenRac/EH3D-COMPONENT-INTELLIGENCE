@@ -1,0 +1,5 @@
+﻿reference,value,package,manufacturer,mpn,datasheet
+C1,"100 nF, X7R",0402,Murata,GRM155R71C104KA88D,
+L1,"4.7 µH ""low loss""",,Acme Coils,"AC-47,LL",
+
+D1,,,Vishay,1N4148W-E3-08,

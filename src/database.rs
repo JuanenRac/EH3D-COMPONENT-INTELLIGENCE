@@ -97,6 +97,9 @@ pub struct Component {
     /// The licence under which the data may be redistributed, as written by the person who reviewed it.
     #[serde(default)]
     pub licence: Option<String>,
+    /// The reference designators of the design that use this part (`R1`, `C3`), kept in order and without repeats by the importer.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub references: Vec<String>,
     /// The observations of each field, by field name.
     #[serde(default)]
     pub fields: BTreeMap<String, Vec<Observation>>,
@@ -162,6 +165,28 @@ impl Database {
     /// The database as JSON (the order of the components is kept; the fields are sorted by name).
     pub fn to_json(&self) -> Result<String, CintError> {
         serde_json::to_string_pretty(self).map_err(|e| CintError::BadJson(e.to_string()))
+    }
+
+    /// The canonical form of the database for a file: components sorted by identity, references sorted, fields sorted by name, two-space
+    /// indentation and one final line feed. The same content always gives the same text, so the file can be compared and kept under version control.
+    pub fn to_canonical_json(&self) -> Result<String, CintError> {
+        let mut sorted = self.clone();
+        for c in &mut sorted.components {
+            c.references.sort();
+            for list in c.fields.values_mut() {
+                list.sort_by(|a, b| (&a.value, &a.source).cmp(&(&b.value, &b.source)));
+            }
+        }
+        sorted.components.sort_by(|a, b| {
+            (a.identity(), &a.manufacturer, &a.part_number).cmp(&(
+                b.identity(),
+                &b.manufacturer,
+                &b.part_number,
+            ))
+        });
+        let mut text = sorted.to_json()?;
+        text.push('\n');
+        Ok(text)
     }
 
     /// Find a component by manufacturer and part number (letter case and surrounding spaces do not matter).
@@ -322,6 +347,7 @@ mod tests {
                 source: String::new(),
             }),
             licence: Some("own notes".into()),
+            references: vec![],
             fields,
         }
     }

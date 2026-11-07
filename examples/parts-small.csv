@@ -1,0 +1,5 @@
+reference,value,package,manufacturer,mpn,datasheet
+R1,10 kΩ,0603,Yageo,RC0603FR-0710KL,
+R2,10 kΩ,0603,Yageo,RC0603FR-0710KL,
+C1,100 nF,0402,Murata,GRM155R71C104KA88D,
+U1,,SOT-23-5,Texas Instruments,TLV70033DDCR,https://example.invalid/tlv70033.pdf
