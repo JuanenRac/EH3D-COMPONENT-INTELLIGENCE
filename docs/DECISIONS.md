@@ -25,3 +25,15 @@ New JSON files use the JSON Canonicalization Scheme (RFC 8785) plus UTF-8 withou
 State: **accepted**.
 
 The real projects of the author are never committed, pasted into issues or sent to a service. Tests use synthetic cases or minimal anonymised reproducers that the owner approved. Scripts that run over a private corpus use redacted mode, which reports only codes, counts, levels and hashes.
+
+## Files in the project, no database server
+
+State: **accepted**.
+
+The database is a JSON file kept next to the project, in a stable form (`DATABASE_FORMAT.md`): it can be read, compared and versioned like any other file. There is no database server. A file is written atomically and an existing file is never replaced without an explicit order.
+
+## A plain CSV list of parts as the first import format
+
+State: **accepted**.
+
+The first import format is a CSV file with fixed columns (`CSV_FORMAT.md`): a mandatory header, a configurable separator, quotes, UTF-8 with or without a byte order mark, LF or CRLF. Its refusals carry codes `EH3D-CINT-NNN`; the checks of a database keep `PHOENIX-CINT-NNN`.

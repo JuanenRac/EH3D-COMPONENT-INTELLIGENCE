@@ -1,6 +1,6 @@
 # EH3D-COMPONENT-INTELLIGENCE: scope
 
-Status: **early code**. EH3D-COMPONENT-INTELLIGENCE has a library and a command line that check a JSON database; most of what this page lists is still planned. This page says what it is meant to do, what it will not do, and where it sits. Nothing has been run on real data.
+Status: **early code**. EH3D-COMPONENT-INTELLIGENCE has a library and a command line that check a JSON database and import a CSV list of parts into one; most of what this page lists is still planned. This page says what it is meant to do, what it will not do, and where it sits. Nothing has been run on real data.
 
 ## Purpose
 
@@ -25,7 +25,7 @@ Technical database of electronic components with metadata and provenance for eac
 
 A library without a window, written in Rust (planned), with a command-line interface and, where it applies, a kind of task for the server. Programs of the suite exchange work through project files or through the server, never by depending on each other.
 
-The package is a single crate (a library and a command line, no window) with `check`, `show` and `export`; the database is a JSON file. Importers and the link with the symbols and footprints of the design tool are not written.
+The package is a single crate (a library and a command line, no window) with `check`, `show`, `export`, `list`, `check-csv` and `import`; the database is a JSON file kept next to the project (`DATABASE_FORMAT.md`), and the only import format is the CSV list of parts (`CSV_FORMAT.md`). Other importers and the link with the symbols and footprints of the design tool are not written.
 
 ## Where it sits
 
