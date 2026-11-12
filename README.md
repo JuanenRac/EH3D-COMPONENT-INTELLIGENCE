@@ -109,6 +109,7 @@ EH3D-COMPONENT-INTELLIGENCE/
 ├── src/                                         the library and the command line
 ├── examples/                                    small CSV files and a settings file to try the commands
 ├── Cargo.toml Cargo.lock deny.toml              Rust package and policy of the dependencies
+├── rust-toolchain.toml                          the pinned Rust toolchain
 ├── tools/                                       the repository check, its tests and the picture tools
 ├── images/                                      banner and the Architecture and Repository Structure pictures
 ├── .github/                                     CI and dashboard workflows, issue and pull-request templates

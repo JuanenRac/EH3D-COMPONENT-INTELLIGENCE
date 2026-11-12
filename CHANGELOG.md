@@ -4,6 +4,7 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The Rust toolchain is pinned:** `rust-toolchain.toml` fixes the version of Rust (the same one in every repository of the suite) with `rustfmt` and `clippy`, the workflows install that version and not `stable`, so a new release of Rust cannot turn the CI red by itself.
 ## [0.0.3] - Import of components from a CSV file stored in the project and the safe write of the database
 
 - **Import of a CSV list of parts:** the new `import` command makes a database file from a CSV with the fixed columns `reference`, `value`, `package`, `manufacturer`, `mpn` and `datasheet`; a mandatory header, a configurable separator, quotes, UTF-8 with or without a byte order mark and LF or CRLF lines are accepted. The format is written in `docs/CSV_FORMAT.md`.

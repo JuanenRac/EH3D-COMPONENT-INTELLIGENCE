@@ -109,6 +109,7 @@ EH3D-COMPONENT-INTELLIGENCE/
 ├── src/                                         ライブラリとコマンドライン
 ├── examples/                                    コマンドを試すための小さな CSV ファイルと設定ファイル
 ├── Cargo.toml Cargo.lock deny.toml              Rust パッケージと依存関係の方針
+├── rust-toolchain.toml                          固定されたRustツールチェーン
 ├── tools/                                       リポジトリ チェック、そのテスト、画像のツール
 ├── images/                                      バナーとアーキテクチャ・リポジトリ構成の図
 ├── .github/                                     CI とダッシュボードのワークフロー、Issue と PR のテンプレート
