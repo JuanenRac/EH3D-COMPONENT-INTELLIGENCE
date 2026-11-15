@@ -18,6 +18,7 @@ pub mod database;
 pub mod error;
 pub mod import;
 pub mod issue;
+pub mod simulation;
 pub mod store;
 
 pub use database::{Component, Database, Finding, Observation};

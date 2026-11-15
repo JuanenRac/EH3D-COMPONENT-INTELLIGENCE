@@ -46,7 +46,7 @@ Chaque ligne est une partie de ce dépôt et le feu dit où elle en est aujourd'
 | Domaine | État | Ce que cela veut dire ici |
 |---|---|---|
 | Contrôles du dépôt | 🟡 | Le contrôle du dépôt, celui des images et les 3 tests de la base tournent dans la CI et réussissent. |
-| Tests | 🟡 | Les 46 tests du code Rust et les 3 de la base sont exécutés par la CI. Ils n'utilisent que des données faites par les tests eux-mêmes et les petits fichiers de `examples/`. |
+| Tests | 🟡 | Les 57 tests du code Rust et les 3 de la base sont exécutés par la CI. Ils n'utilisent que des données faites par les tests eux-mêmes et les petits fichiers de `examples/`. Elles incluent une simulation à graine fixe de les programmes qui exportent une liste de pièces, avec pannes injectées et reprise. |
 | Matériel réel | 🟠 | Non exécuté sur une machine ni une carte : rien ici n'a été essayé sur du matériel. |
 | Fonction prévue | 🟠 | Écrit : la fiche à identité exacte, la provenance de chaque observation, les conflits, l'état de confiance, l'origine et la licence, et l'import d'une liste de pièces CSV vers un fichier JSON. Non écrit : d'autres importeurs, le lien avec symboles et empreintes et les fiches techniques. |
 | Exigences | 🟠 | Les 6 exigences sont au stade de prototype : le code et les tests existent, seulement sur des données faites par les tests ; aucune n'est validée. |
