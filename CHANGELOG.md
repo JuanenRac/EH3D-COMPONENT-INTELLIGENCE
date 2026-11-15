@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **Simulation mode:** add `src/simulation.rs`, a host twin of the program that exports a list of parts: a seeded exporter (the same seed gives the same file), seven injectable kinds of damage (invalid UTF-8, a missing or unknown column, a ragged line, a repeated reference, an empty part number, an unclosed quotation mark), a recovery that asks for the list again, and tests of the limit of bytes to the byte, of a list of three thousand lines, of seeded byte damage that must never panic and of the safe writing of the database file. Eleven deterministic tests cover them. The manifest now says `evidence: simulator`; nothing has run against a real export.
+
 ## [0.0.4] - Split CI with a build cache and a pinned Rust toolchain
 
 - **The shared validation tools are updated:** the validator also runs the workflow and lessons checks of the suite with their latest rules, including a check to run before every push.

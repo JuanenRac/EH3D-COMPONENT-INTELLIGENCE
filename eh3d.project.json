@@ -12,7 +12,7 @@
   ],
   "deployment_target": "user-pc",
   "maturity": "scaffolding",
-  "evidence": "host-test",
+  "evidence": "simulator",
   "hardware_bound": false,
   "family": "PHOENIX",
   "parent": null,
