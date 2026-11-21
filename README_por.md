@@ -46,7 +46,7 @@ Cada linha é uma parte deste repositório e a luz diz até onde chega hoje. É 
 | Área | Estado | O que significa aqui |
 |---|---|---|
 | Verificações do repositório | 🟡 | A verificação do repositório, a das imagens e os 3 testes da base correm na CI e passam. |
-| Testes | 🟡 | Os 66 testes do código Rust e os 3 da base são executados pelo CI. Usam apenas dados feitos pelos próprios testes e os ficheiros pequenos de `examples/`. Incluem uma simulação com semente fixa de os programas que exportam uma lista de peças, com falhas injetadas e recuperação. |
+| Testes | 🟡 | Os 202 testes do código Rust e os 3 da base são executados pelo CI. Usam apenas dados feitos pelos próprios testes e os ficheiros pequenos de `examples/`. Incluem uma simulação com semente fixa de os programas que exportam uma lista de peças, com falhas injetadas e recuperação. |
 | Hardware real | 🟠 | Não foi executado em nenhuma máquina nem placa: nada aqui foi experimentado em hardware. |
 | Função planeada | 🟠 | Escrito: o registo com identidade exata, a proveniência de cada observação, os conflitos, o estado de confiança, a origem e a licença, e a importação de uma lista de peças em CSV para um ficheiro JSON. Por escrever: outros importadores, a ligação com símbolos e pegadas e as folhas de dados. |
 | Requisitos | 🟠 | Os 6 requisitos estão em protótipo: existem código e testes, só com dados feitos pelos testes; nenhum está validado. |
