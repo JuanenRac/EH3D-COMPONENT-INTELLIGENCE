@@ -3,6 +3,9 @@
 All notable changes to this project are documented here.
 
 ## [Unreleased]
+
+## [0.0.5] - Repeated fields and input order no longer hide disagreements, and many more tests
+
 - **A field written twice in the database is refused:** the last one took the place of the first in silence, so two sources that disagreed could become one and a record could pass the check.
 - **The same content gives the same canonical file:** observations with the same value and source, and records with the same spelling, kept the order they were written in.
 - **A JSON array is no longer read as a database:** only an object is.
