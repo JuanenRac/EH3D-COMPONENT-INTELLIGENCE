@@ -340,4 +340,53 @@ mod tests {
         assert_eq!(err("").code, ImportCode::BadHeader);
         assert_eq!(err("\n\r\n\n").code, ImportCode::BadHeader);
     }
+
+    #[test]
+    fn seeded_fields_with_every_special_character_read_back_as_written() {
+        let alphabet = ['a', ',', '"', '\n', ' ', '\u{e9}', ';', '\r'];
+        let mut state = 17u64;
+        let mut next = |n: usize| {
+            state = state
+                .wrapping_mul(6_364_136_223_846_793_005)
+                .wrapping_add(1_442_695_040_888_963_407);
+            (state >> 33) as usize % n
+        };
+        for round in 0..300 {
+            let fields: Vec<String> = (0..3)
+                .map(|_| {
+                    (0..next(6))
+                        .map(|_| alphabet[next(alphabet.len())])
+                        .collect()
+                })
+                .collect();
+            let quoted: Vec<String> = fields
+                .iter()
+                .map(|f| format!("\"{}\"", f.replace('"', "\"\"")))
+                .collect();
+            let table = ok(&format!("a,b,c\r\n{}\r\n", quoted.join(",")));
+            assert_eq!(table.rows.len(), 1, "round {round}");
+            assert_eq!(table.rows[0].fields, fields, "round {round}");
+        }
+    }
+
+    #[test]
+    fn seeded_bytes_never_panic_and_every_refusal_names_a_line_of_the_file() {
+        let alphabet = [b'a', b',', b'"', b'\n', b'\r', 0xC3, 0xA9, 0xEF, 0x00];
+        let mut state = 23u64;
+        let mut next = |n: usize| {
+            state = state
+                .wrapping_mul(6_364_136_223_846_793_005)
+                .wrapping_add(1_442_695_040_888_963_407);
+            (state >> 33) as usize % n
+        };
+        for round in 0..2000 {
+            let bytes: Vec<u8> = (0..next(40))
+                .map(|_| alphabet[next(alphabet.len())])
+                .collect();
+            let lines = 1 + bytes.iter().filter(|b| **b == b'\n').count();
+            if let Err(issue) = parse(&bytes, ',', &LIMITS) {
+                assert!(issue.line <= lines, "round {round}: {issue:?}");
+            }
+        }
+    }
 }

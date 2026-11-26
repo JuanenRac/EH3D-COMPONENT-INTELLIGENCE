@@ -101,7 +101,7 @@ pub struct Component {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub references: Vec<String>,
     /// The observations of each field, by field name.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "unique_map")]
     pub fields: BTreeMap<String, Vec<Observation>>,
 }
 
@@ -113,6 +113,39 @@ impl Component {
             self.part_number.trim().to_lowercase(),
         )
     }
+}
+
+/// A JSON object read as a map that refuses a key written twice: without this the last one would silently take the place of the others.
+fn unique_map<'de, D, V>(deserializer: D) -> Result<BTreeMap<String, V>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+    V: Deserialize<'de>,
+{
+    struct Unique<V>(std::marker::PhantomData<V>);
+    impl<'de, V: Deserialize<'de>> serde::de::Visitor<'de> for Unique<V> {
+        type Value = BTreeMap<String, V>;
+
+        fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            f.write_str("an object")
+        }
+
+        fn visit_map<A: serde::de::MapAccess<'de>>(
+            self,
+            mut map: A,
+        ) -> Result<Self::Value, A::Error> {
+            let mut out = BTreeMap::new();
+            while let Some((key, value)) = map.next_entry::<String, V>()? {
+                if out.contains_key(&key) {
+                    return Err(serde::de::Error::custom(format!(
+                        "the key `{key}` is written twice"
+                    )));
+                }
+                out.insert(key, value);
+            }
+            Ok(out)
+        }
+    }
+    deserializer.deserialize_map(Unique(std::marker::PhantomData))
 }
 
 /// Something wrong in the database.
@@ -145,6 +178,10 @@ impl Database {
                 what: "database bytes",
             });
         }
+        // a JSON array would be read as a list of the fields in order, so only an object is a database
+        if !text.trim_start().starts_with('{') {
+            return Err(CintError::BadJson("a JSON object was expected".into()));
+        }
         let db: Database =
             serde_json::from_str(text).map_err(|e| CintError::BadJson(e.to_string()))?;
         if db.components.len() > config.max_components {
@@ -174,15 +211,18 @@ impl Database {
         for c in &mut sorted.components {
             c.references.sort();
             for list in c.fields.values_mut() {
-                list.sort_by(|a, b| (&a.value, &a.source).cmp(&(&b.value, &b.source)));
+                // the rest of the observation breaks a tie, so that the order of the input never shows
+                list.sort_by(|a, b| {
+                    (&a.value, &a.source)
+                        .cmp(&(&b.value, &b.source))
+                        .then_with(|| format!("{a:?}").cmp(&format!("{b:?}")))
+                });
             }
         }
         sorted.components.sort_by(|a, b| {
-            (a.identity(), &a.manufacturer, &a.part_number).cmp(&(
-                b.identity(),
-                &b.manufacturer,
-                &b.part_number,
-            ))
+            (a.identity(), &a.manufacturer, &a.part_number)
+                .cmp(&(b.identity(), &b.manufacturer, &b.part_number))
+                .then_with(|| format!("{a:?}").cmp(&format!("{b:?}")))
         });
         let mut text = sorted.to_json()?;
         text.push('\n');
@@ -539,5 +579,89 @@ mod tests {
             .map(|f| f.part_number)
             .collect();
         assert_eq!(parts, vec!["A", "B"]);
+    }
+
+    #[test]
+    fn a_field_written_twice_is_refused_so_that_a_disagreement_cannot_disappear() {
+        let text = r#"{"components":[{"manufacturer":"A","part_number":"B","fields":{
+            "vcc":[{"value":"3.3 V","method":"transcribed"}],
+            "vcc":[{"value":"5 V","method":"transcribed"}]}}]}"#;
+        match Database::from_json(text, &Config::default()) {
+            Err(CintError::BadJson(message)) => {
+                assert!(
+                    message.contains("vcc") && message.contains("twice"),
+                    "{message}"
+                )
+            }
+            other => panic!("{other:?}"),
+        }
+    }
+
+    #[test]
+    fn a_json_array_is_not_a_database() {
+        for text in ["[[]]", " [[]]"] {
+            assert!(
+                matches!(
+                    Database::from_json(text, &Config::default()),
+                    Err(CintError::BadJson(_))
+                ),
+                "{text}"
+            );
+        }
+    }
+
+    #[test]
+    fn the_canonical_text_does_not_depend_on_the_order_of_equal_observations_or_records() {
+        let mut one = component("X1");
+        let list = one.fields.get_mut("vcc_max").unwrap();
+        let mut other = list[0].clone();
+        other.method = Method::Measured;
+        list.push(other);
+        let mut third = list[0].clone();
+        third.page = Some("9".into());
+        list.push(third);
+        let mut twin = component("X1");
+        twin.licence = Some("another".into());
+        let a = Database {
+            components: vec![one.clone(), twin.clone()],
+        };
+        one.fields.get_mut("vcc_max").unwrap().reverse();
+        let b = Database {
+            components: vec![twin, one],
+        };
+        assert_eq!(
+            a.to_canonical_json().unwrap(),
+            b.to_canonical_json().unwrap()
+        );
+    }
+
+    #[test]
+    fn the_canonical_text_read_again_is_the_same_text() {
+        let db = Database {
+            components: vec![component("b"), component("A"), component("a")],
+        };
+        let text = db.to_canonical_json().unwrap();
+        let again = Database::from_json(&text, &Config::default()).unwrap();
+        assert_eq!(again.to_canonical_json().unwrap(), text);
+    }
+
+    #[test]
+    fn a_database_cut_at_any_place_is_an_error_and_never_a_panic() {
+        let mut part = component("X\u{e9}");
+        part.references = vec!["R1".into()];
+        let text = Database {
+            components: vec![part],
+        }
+        .to_json()
+        .unwrap();
+        for end in (0..text.len()).filter(|i| text.is_char_boundary(*i)) {
+            assert!(
+                matches!(
+                    Database::from_json(&text[..end], &Config::default()),
+                    Err(CintError::BadJson(_))
+                ),
+                "cut at {end}"
+            );
+        }
     }
 }
