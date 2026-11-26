@@ -40,7 +40,7 @@ The database is **one JSON file kept next to the project** (for example `parts.j
 The commands that write a file (`import`) write it in a fixed form, so that the same content always gives the same bytes:
 
 * components sorted by identity (manufacturer, then part number, in lower case), then by the spelling;
-* `references` sorted; the observations of a field sorted by value and then source; the fields sorted by name;
+* `references` sorted; the observations of a field sorted by value, then source, then the rest of the observation (two records with the same spelling are ordered by their content too); the fields sorted by name;
 * two-space indentation, UTF-8 without a byte order mark, and one final line feed.
 
 This is a stable form of this project, not the canonicalisation scheme of RFC 8785.
@@ -53,5 +53,5 @@ This is a stable form of this project, not the canonicalisation scheme of RFC 87
 
 ## Reading
 
-A database larger than `max_database_bytes`, with more than `max_components` records, or with more than `max_observations` observations in one field is refused. Unknown keys are ignored; a file that is not valid JSON of this shape is refused with a message.
+A database larger than `max_database_bytes`, with more than `max_components` records, or with more than `max_observations` observations in one field is refused. Unknown keys are ignored; a file that is not valid JSON of this shape (an object, with no field name written twice) is refused with a message.
 The files are read as written by a person too: `check` does not repair anything.

@@ -3,6 +3,10 @@
 All notable changes to this project are documented here.
 
 ## [Unreleased]
+- **A field written twice in the database is refused:** the last one took the place of the first in silence, so two sources that disagreed could become one and a record could pass the check.
+- **The same content gives the same canonical file:** observations with the same value and source, and records with the same spelling, kept the order they were written in.
+- **A JSON array is no longer read as a database:** only an object is.
+- **7 more tests** of the Rust code: a database cut at every place, the canonical text read again, seeded CSV fields with every special character and seeded bytes that never stop the reader.
 
 - **Product tests of the behaviour:** `tests/product.rs` adds 136 deterministic tests of the library and of the command line, without touching the behaviour: every limit of the settings and of the CSV reader tested at its exact edge, damaged and empty input (invalid UTF-8, lone carriage returns, unclosed quotation marks, a header alone, random bytes), the stable codes and their order, the shape of every line the command line prints and its exit codes, the canonical form of the database (idempotent and independent of the order of the input) and the seeded simulation of the exporter (each kind of damage gives its own code, recovery within the attempts).
 - **Simulation mode:** add `src/simulation.rs`, a host twin of the program that exports a list of parts: a seeded exporter (the same seed gives the same file), seven injectable kinds of damage (invalid UTF-8, a missing or unknown column, a ragged line, a repeated reference, an empty part number, an unclosed quotation mark), a recovery that asks for the list again, and tests of the limit of bytes to the byte, of a list of three thousand lines, of seeded byte damage that must never panic and of the safe writing of the database file. Eleven deterministic tests cover them. The manifest now says `evidence: simulator`; nothing has run against a real export.

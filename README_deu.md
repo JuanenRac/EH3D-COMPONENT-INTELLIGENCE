@@ -46,7 +46,7 @@ Jede Zeile ist ein Teil dieses Repositorys, und die Ampel sagt, wie weit er heut
 | Bereich | Stand | Was das hier bedeutet |
 |---|---|---|
 | Repository-Prüfungen | 🟡 | Die Repository-Prüfung, die Prüfung der Bilder und die 3 Tests der Basis laufen in der CI und bestehen. |
-| Tests | 🟡 | Die 202 Tests des Rust-Codes und die 3 der Basis führt die CI aus. Sie verwenden nur Daten, die die Tests selbst erzeugen, und die kleinen Dateien in `examples/`. Dazu gehört eine Simulation mit festem Seed für die Programme, die eine Teileliste exportieren, mit eingespeisten Fehlern und Wiederherstellung. |
+| Tests | 🟡 | Die 209 Tests des Rust-Codes und die 3 der Basis führt die CI aus. Sie verwenden nur Daten, die die Tests selbst erzeugen, und die kleinen Dateien in `examples/`. Dazu gehört eine Simulation mit festem Seed für die Programme, die eine Teileliste exportieren, mit eingespeisten Fehlern und Wiederherstellung. |
 | Echte Hardware | 🟠 | Auf keiner Maschine und keiner Platine ausgeführt: nichts hier wurde auf Hardware ausprobiert. |
 | Geplante Funktion | 🟠 | Geschrieben: der Eintrag mit exakter Identität, die Herkunft jeder Beobachtung, Konflikte, Vertrauensstatus, Herkunft und Lizenz sowie der Import einer CSV-Teileliste in eine JSON-Datei. Nicht geschrieben: andere Importer, die Verbindung zu Symbolen und Footprints und die Datenblätter. |
 | Anforderungen | 🟠 | Die 6 Anforderungen sind im Prototyp: Code und Tests existieren, nur mit von den Tests erzeugten Daten; keine ist validiert. |
