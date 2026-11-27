@@ -19,7 +19,7 @@
 
 ---
 
-**Verificação de honestidade - o que corre hoje:** uma biblioteca Rust e uma linha de comandos que importam uma lista de peças de um ficheiro CSV para uma base de dados JSON guardada como ficheiro junto do projeto (`import`, `check-csv`, `list`) e que encontram o que está errado numa base: identidades duplicadas, observações sem fonte, fontes que discordam, registos marcados como verificados com algo pendente e registos sem origem ou licença registadas; recusam exportar dados sem licença e nunca substituem um ficheiro existente sem uma ordem explícita. Tudo foi testado apenas com dados feitos pelos próprios testes e com os ficheiros pequenos de `examples/`. O que não existe: outros formatos de importação (só o CSV de `docs/CSV_FORMAT.md`), juntar uma importação a uma base existente e a ligação com os símbolos e pegadas da ferramenta de projeto.
+**Verificação de honestidade - o que corre hoje:** uma biblioteca Rust e uma linha de comandos que importam uma lista de peças de um ficheiro CSV para uma base de dados JSON guardada como ficheiro junto do projeto (`import`, `check-csv`, `list`) e que encontram o que está errado numa base: identidades duplicadas, observações sem fonte, fontes que discordam, registos marcados como verificados com algo pendente e registos sem origem ou licença registadas; recusam exportar dados sem licença e nunca substituem um ficheiro existente sem uma ordem explícita. Tudo foi testado apenas com dados feitos pelos próprios testes e com os ficheiros pequenos de `examples/`. O que não existe: outros formatos de importação (só o CSV de `docs/CSV_FORMAT.md`), juntar uma importação a uma base existente e a ligação com os símbolos e pegadas da ferramenta de projeto. Uma base de dados com uma chave desconhecida é recusada, e um registo marcado como verificado sem quaisquer dados é assinalado e não é exportado.
 
 ---
 
@@ -46,7 +46,7 @@ Cada linha é uma parte deste repositório e a luz diz até onde chega hoje. É 
 | Área | Estado | O que significa aqui |
 |---|---|---|
 | Verificações do repositório | 🟡 | A verificação do repositório, a das imagens e os 3 testes da base correm na CI e passam. |
-| Testes | 🟡 | Os 210 testes do código Rust e os 3 da base são executados pelo CI. Usam apenas dados feitos pelos próprios testes e os ficheiros pequenos de `examples/`. Incluem uma simulação com semente fixa de os programas que exportam uma lista de peças, com falhas injetadas e recuperação. |
+| Testes | 🟡 | Os 212 testes do código Rust e os 3 da base são executados pelo CI. Usam apenas dados feitos pelos próprios testes e os ficheiros pequenos de `examples/`. Incluem uma simulação com semente fixa de os programas que exportam uma lista de peças, com falhas injetadas e recuperação. |
 | Hardware real | 🟠 | Não foi executado em nenhuma máquina nem placa: nada aqui foi experimentado em hardware. |
 | Função planeada | 🟠 | Escrito: o registo com identidade exata, a proveniência de cada observação, os conflitos, o estado de confiança, a origem e a licença, e a importação de uma lista de peças em CSV para um ficheiro JSON. Por escrever: outros importadores, a ligação com símbolos e pegadas e as folhas de dados. |
 | Requisitos | 🟠 | Os 6 requisitos estão em protótipo: existem código e testes, só com dados feitos pelos testes; nenhum está validado. |

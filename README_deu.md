@@ -19,7 +19,7 @@
 
 ---
 
-**Ehrlichkeitscheck - was heute tatsächlich läuft:** eine Rust-Bibliothek und eine Befehlszeile, die eine Liste von Teilen aus einer CSV-Datei in eine JSON-Datenbank importieren, die als Datei neben dem Projekt liegt (`import`, `check-csv`, `list`), und die finden, was an einer Datenbank falsch ist: doppelte Identitäten, Beobachtungen ohne Quelle, Quellen, die sich widersprechen, als geprüft markierte Einträge mit offenen Punkten und Einträge ohne erfasste Herkunft oder Lizenz; Daten ohne Lizenz exportieren sie nicht, und eine vorhandene Datei ersetzen sie nie ohne ausdrücklichen Befehl. Alles ist nur mit Daten getestet, die die eigenen Tests erzeugen, und mit den kleinen Dateien in `examples/`. Es fehlen: andere Importformate (nur das CSV aus `docs/CSV_FORMAT.md`), das Zusammenführen eines Imports mit einer bestehenden Datenbank und die Verbindung zu Symbolen und Footprints des Entwurfswerkzeugs.
+**Ehrlichkeitscheck - was heute tatsächlich läuft:** eine Rust-Bibliothek und eine Befehlszeile, die eine Liste von Teilen aus einer CSV-Datei in eine JSON-Datenbank importieren, die als Datei neben dem Projekt liegt (`import`, `check-csv`, `list`), und die finden, was an einer Datenbank falsch ist: doppelte Identitäten, Beobachtungen ohne Quelle, Quellen, die sich widersprechen, als geprüft markierte Einträge mit offenen Punkten und Einträge ohne erfasste Herkunft oder Lizenz; Daten ohne Lizenz exportieren sie nicht, und eine vorhandene Datei ersetzen sie nie ohne ausdrücklichen Befehl. Alles ist nur mit Daten getestet, die die eigenen Tests erzeugen, und mit den kleinen Dateien in `examples/`. Es fehlen: andere Importformate (nur das CSV aus `docs/CSV_FORMAT.md`), das Zusammenführen eines Imports mit einer bestehenden Datenbank und die Verbindung zu Symbolen und Footprints des Entwurfswerkzeugs. Eine Datenbank mit einem unbekannten Schlüssel wird abgelehnt, und ein als geprüft markierter Datensatz ohne jegliche Daten wird gemeldet und nicht exportiert.
 
 ---
 
@@ -46,7 +46,7 @@ Jede Zeile ist ein Teil dieses Repositorys, und die Ampel sagt, wie weit er heut
 | Bereich | Stand | Was das hier bedeutet |
 |---|---|---|
 | Repository-Prüfungen | 🟡 | Die Repository-Prüfung, die Prüfung der Bilder und die 3 Tests der Basis laufen in der CI und bestehen. |
-| Tests | 🟡 | Die 210 Tests des Rust-Codes und die 3 der Basis führt die CI aus. Sie verwenden nur Daten, die die Tests selbst erzeugen, und die kleinen Dateien in `examples/`. Dazu gehört eine Simulation mit festem Seed für die Programme, die eine Teileliste exportieren, mit eingespeisten Fehlern und Wiederherstellung. |
+| Tests | 🟡 | Die 212 Tests des Rust-Codes und die 3 der Basis führt die CI aus. Sie verwenden nur Daten, die die Tests selbst erzeugen, und die kleinen Dateien in `examples/`. Dazu gehört eine Simulation mit festem Seed für die Programme, die eine Teileliste exportieren, mit eingespeisten Fehlern und Wiederherstellung. |
 | Echte Hardware | 🟠 | Auf keiner Maschine und keiner Platine ausgeführt: nichts hier wurde auf Hardware ausprobiert. |
 | Geplante Funktion | 🟠 | Geschrieben: der Eintrag mit exakter Identität, die Herkunft jeder Beobachtung, Konflikte, Vertrauensstatus, Herkunft und Lizenz sowie der Import einer CSV-Teileliste in eine JSON-Datei. Nicht geschrieben: andere Importer, die Verbindung zu Symbolen und Footprints und die Datenblätter. |
 | Anforderungen | 🟠 | Die 6 Anforderungen sind im Prototyp: Code und Tests existieren, nur mit von den Tests erzeugten Daten; keine ist validiert. |

@@ -25,6 +25,7 @@ pub enum Method {
 
 /// One value of one field, with where it came from.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Observation {
     /// The value, as text with its unit (`3.3 V`).
     pub value: String,
@@ -59,6 +60,7 @@ pub enum OriginKind {
 
 /// Where a record came from.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Origin {
     /// Manual or import.
     pub kind: OriginKind,
@@ -80,6 +82,7 @@ pub enum Status {
 
 /// One component.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Component {
     /// The manufacturer, as written on the data sheet.
     pub manufacturer: String,
@@ -163,8 +166,13 @@ pub struct Finding {
     pub message: String,
 }
 
+/// The finding of a record marked `verified` that holds no value at all.
+const VERIFIED_WITHOUT_DATA: &str =
+    "marked verified but the record holds no data: there is no value a person could have checked";
+
 /// The database.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct Database {
     /// The components.
     pub components: Vec<Component>,
@@ -320,7 +328,18 @@ impl Database {
                     blocked = true;
                 }
             }
-            if c.status == Status::Verified && blocked {
+            let no_data = c
+                .fields
+                .values()
+                .flatten()
+                .all(|o| o.value.trim().is_empty());
+            if c.status == Status::Verified && no_data {
+                out.push(at(
+                    Code::VerifiedWithPending,
+                    None,
+                    VERIFIED_WITHOUT_DATA.into(),
+                ));
+            } else if c.status == Status::Verified && blocked {
                 out.push(at(
                     Code::VerifiedWithPending,
                     None,
@@ -339,17 +358,19 @@ impl Database {
         out
     }
 
-    /// The database as JSON for redistribution. With `require_licence_for_export` a record without a licence refuses the whole export, and the findings say which.
+    /// The database as JSON for redistribution. A record marked `verified` that holds no data refuses the whole export, and so does, with
+    /// `require_licence_for_export`, a record without a licence; the findings say which.
     pub fn export(&self, config: &Config) -> Result<String, Vec<Finding>> {
-        if config.require_licence_for_export {
-            let missing: Vec<Finding> = self
-                .check(config)
-                .into_iter()
-                .filter(|f| f.code == Code::NoLicence)
-                .collect();
-            if !missing.is_empty() {
-                return Err(missing);
-            }
+        let refused: Vec<Finding> = self
+            .check(config)
+            .into_iter()
+            .filter(|f| {
+                f.message == VERIFIED_WITHOUT_DATA
+                    || (config.require_licence_for_export && f.code == Code::NoLicence)
+            })
+            .collect();
+        if !refused.is_empty() {
+            return Err(refused);
         }
         self.to_json().map_err(|_| Vec::new())
     }

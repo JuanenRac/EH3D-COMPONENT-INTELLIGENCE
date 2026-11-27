@@ -8,7 +8,7 @@ The technical database of the electronic components of a design, with the metada
 
 ## What it does
 
-* Reads a database (a JSON file, `DATABASE_FORMAT.md`) within a size limit and checks it: duplicate identities (manufacturer and part number, whatever the letter case), observations without a source, sources that disagree, records marked verified while something is pending, and a missing origin or licence.
+* Reads a database (a JSON file, `DATABASE_FORMAT.md`) within a size limit and checks it: duplicate identities (manufacturer and part number, whatever the letter case), observations without a source, sources that disagree, records marked verified while something is pending or without any data, and a missing origin or licence. A key it does not know refuses the file.
 * Shows a record with the values and sources of every conflict, and lists the records.
 * Refuses to export data without a licence (a setting can switch the rule off) and never merges two records.
 * Imports a CSV list of parts (`CSV_FORMAT.md`) into a new database file: strict and bounded, every problem reported with a code `EH3D-CINT-NNN` and a line, nothing written when the file is bad, and an existing file replaced only with the explicit order.

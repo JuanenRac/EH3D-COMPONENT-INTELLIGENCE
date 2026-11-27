@@ -28,7 +28,7 @@ The database is **one JSON file kept next to the project** (for example `parts.j
 | Key | Meaning |
 |---|---|
 | `manufacturer`, `part_number` | The identity. Two records with the same pair (letter case and surrounding spaces ignored) are a finding (`PHOENIX-CINT-001`). |
-| `status` | `draft` or `verified`. A person sets it; nothing here does. |
+| `status` | `draft` or `verified`. A person sets it; nothing here does. A `verified` record must hold at least one value: one without any data is a finding (`PHOENIX-CINT-004`) and refuses the export. |
 | `pending` | The fields still to review. A record with pending fields must not be `verified`. |
 | `origin` | `{"kind": "manual" or "import", "source": ...}`; an import must name its source. |
 | `licence` | The licence of the data, as written by the person who reviewed it; empty means it cannot be exported. |
@@ -53,5 +53,5 @@ This is a stable form of this project, not the canonicalisation scheme of RFC 87
 
 ## Reading
 
-A database larger than `max_database_bytes`, with more than `max_components` records, or with more than `max_observations` observations in one field is refused. Unknown keys are ignored; a file that is not valid JSON of this shape (an object, with no field name written twice) is refused with a message.
+A database larger than `max_database_bytes`, with more than `max_components` records, or with more than `max_observations` observations in one field is refused. A file that is not valid JSON of this shape (an object, with no field name written twice) is refused with a message. A key that is not in the table above is refused too, and the message names it, at every level (the database, a record, its origin and an observation): a mistyped `pending` must not make a record pass as complete, and nothing a person wrote is dropped on the way to the export.
 The files are read as written by a person too: `check` does not repair anything.

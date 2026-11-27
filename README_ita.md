@@ -19,7 +19,7 @@
 
 ---
 
-**Verifica di onestà - cosa funziona oggi:** una libreria Rust e una riga di comando che importano un elenco di parti da un file CSV in una base di dati JSON conservata come file accanto al progetto (`import`, `check-csv`, `list`) e che trovano ciò che non va in una base: identità duplicate, osservazioni senza fonte, fonti in disaccordo, schede segnate come verificate con qualcosa in sospeso e schede senza origine o licenza registrate; rifiutano di esportare dati senza licenza e non sostituiscono mai un file esistente senza un ordine esplicito. Tutto è provato solo su dati prodotti dai propri test e sui piccoli file di `examples/`. Non esistono: altri formati di importazione (solo il CSV di `docs/CSV_FORMAT.md`), l'unione di un'importazione con una base esistente e il collegamento con simboli e impronte dello strumento di progetto.
+**Verifica di onestà - cosa funziona oggi:** una libreria Rust e una riga di comando che importano un elenco di parti da un file CSV in una base di dati JSON conservata come file accanto al progetto (`import`, `check-csv`, `list`) e che trovano ciò che non va in una base: identità duplicate, osservazioni senza fonte, fonti in disaccordo, schede segnate come verificate con qualcosa in sospeso e schede senza origine o licenza registrate; rifiutano di esportare dati senza licenza e non sostituiscono mai un file esistente senza un ordine esplicito. Tutto è provato solo su dati prodotti dai propri test e sui piccoli file di `examples/`. Non esistono: altri formati di importazione (solo il CSV di `docs/CSV_FORMAT.md`), l'unione di un'importazione con una base esistente e il collegamento con simboli e impronte dello strumento di progetto. Una base di dati con una chiave sconosciuta viene rifiutata, e un record segnato come verificato senza alcun dato viene segnalato e non esportato.
 
 ---
 
@@ -46,7 +46,7 @@ Ogni riga è una parte di questo repository e il semaforo dice a che punto è og
 | Area | Stato | Cosa significa qui |
 |---|---|---|
 | Controlli del repository | 🟡 | Il controllo del repository, quello delle immagini e i 3 test della base girano nella CI e passano. |
-| Test | 🟡 | I 210 test del codice Rust e i 3 della base sono eseguiti dalla CI. Usano solo dati prodotti dai test stessi e i piccoli file di `examples/`. Includono una simulazione a seme fisso di i programmi che esportano un elenco di componenti, con guasti iniettati e ripristino. |
+| Test | 🟡 | I 212 test del codice Rust e i 3 della base sono eseguiti dalla CI. Usano solo dati prodotti dai test stessi e i piccoli file di `examples/`. Includono una simulazione a seme fisso di i programmi che esportano un elenco di componenti, con guasti iniettati e ripristino. |
 | Hardware reale | 🟠 | Non eseguito su nessuna macchina né scheda: nulla qui è stato provato su hardware. |
 | Funzione pianificata | 🟠 | Scritto: la scheda con identità esatta, la provenienza di ogni osservazione, i conflitti, lo stato di fiducia, l'origine e la licenza, e l'importazione di un elenco di parti CSV in un file JSON. Non scritto: altri importatori, il collegamento con simboli e impronte e i datasheet. |
 | Requisiti | 🟠 | I 6 requisiti sono a livello di prototipo: codice e test esistono, solo su dati prodotti dai test; nessuno è validato. |
