@@ -482,11 +482,30 @@ fn the_plain_json_keeps_the_order_of_the_components() {
 }
 
 #[test]
-fn json_with_unknown_keys_is_read_and_the_keys_are_dropped() {
-    let text =
-        r#"{"components":[{"manufacturer":"A","part_number":"B","colour":"red"}],"extra":1}"#;
-    let d = Database::from_json(text, &cfg()).unwrap();
-    assert!(!d.to_json().unwrap().contains("colour"));
+fn an_unknown_key_at_any_level_is_refused_and_named() {
+    for (key, text) in [
+        ("extra", r#"{"components":[],"extra":1}"#),
+        (
+            "pendin",
+            r#"{"components":[{"manufacturer":"A","part_number":"B","status":"verified","pendin":["footprint"]}]}"#,
+        ),
+        (
+            "sauce",
+            r#"{"components":[{"manufacturer":"A","part_number":"B","origin":{"kind":"manual","sauce":"x"}}]}"#,
+        ),
+        (
+            "pgae",
+            r#"{"components":[{"manufacturer":"A","part_number":"B","fields":{"v":[{"value":"1","method":"measured","pgae":"3"}]}}]}"#,
+        ),
+    ] {
+        match Database::from_json(text, &cfg()) {
+            Err(CintError::BadJson(message)) => assert!(
+                message.contains("unknown field") && message.contains(key),
+                "{message}"
+            ),
+            other => panic!("{key}: {other:?}"),
+        }
+    }
 }
 
 #[test]
@@ -551,6 +570,44 @@ fn a_verified_record_with_nothing_wrong_has_no_findings() {
     let mut c = part("A", "1");
     c.status = Status::Verified;
     assert!(codes_of(&db(vec![c]), &cfg()).is_empty());
+}
+
+#[test]
+fn a_verified_record_without_any_data_is_flagged_with_the_reason() {
+    let mut empty = part("A", "1");
+    empty.status = Status::Verified;
+    empty.fields.clear();
+    let mut blank = part("A", "2");
+    blank.status = Status::Verified;
+    blank.fields.get_mut("vcc").unwrap()[0].value = "  ".into();
+    blank.pending = vec!["footprint".into()];
+    let found = db(vec![empty.clone(), blank]).check(&cfg());
+    assert_eq!(found.len(), 2);
+    for f in &found {
+        assert_eq!(f.code, Code::VerifiedWithPending);
+        assert!(f.message.contains("holds no data"), "{}", f.message);
+    }
+    empty.status = Status::Draft;
+    assert!(codes_of(&db(vec![empty]), &cfg()).is_empty());
+}
+
+#[test]
+fn a_verified_record_without_any_data_is_not_exported_even_without_the_licence_rule() {
+    let mut c = part("A", "1");
+    c.status = Status::Verified;
+    c.fields.clear();
+    let open = Config {
+        require_licence_for_export: false,
+        ..cfg()
+    };
+    for config in [cfg(), open] {
+        let refused = db(vec![part("A", "0"), c.clone()])
+            .export(&config)
+            .unwrap_err();
+        assert_eq!(refused.len(), 1);
+        assert_eq!(refused[0].part_number, "1");
+        assert!(refused[0].message.contains("holds no data"));
+    }
 }
 
 #[test]

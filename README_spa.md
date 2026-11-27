@@ -19,7 +19,7 @@
 
 ---
 
-**Comprobación de honestidad - lo que se ejecuta hoy:** una biblioteca de Rust y una línea de comandos que importan una lista de piezas desde un archivo CSV a una base de datos JSON guardada como archivo junto al proyecto (`import`, `check-csv`, `list`) y que encuentran lo que está mal en una base: identidades duplicadas, observaciones sin fuente, fuentes que discrepan, registros marcados como verificados con algo pendiente y registros sin origen o licencia registrados; se niegan a exportar datos sin licencia y nunca sustituyen un archivo existente sin una orden explícita. Todo se ha probado solo con datos hechos por sus propias pruebas y con los archivos pequeños de `examples/`. Lo que no existe: otros formatos de importación (solo el CSV de `docs/CSV_FORMAT.md`), fusionar una importación con una base existente y el enlace con los símbolos y huellas de la herramienta de diseño.
+**Comprobación de honestidad - lo que se ejecuta hoy:** una biblioteca de Rust y una línea de comandos que importan una lista de piezas desde un archivo CSV a una base de datos JSON guardada como archivo junto al proyecto (`import`, `check-csv`, `list`) y que encuentran lo que está mal en una base: identidades duplicadas, observaciones sin fuente, fuentes que discrepan, registros marcados como verificados con algo pendiente y registros sin origen o licencia registrados; se niegan a exportar datos sin licencia y nunca sustituyen un archivo existente sin una orden explícita. Todo se ha probado solo con datos hechos por sus propias pruebas y con los archivos pequeños de `examples/`. Lo que no existe: otros formatos de importación (solo el CSV de `docs/CSV_FORMAT.md`), fusionar una importación con una base existente y el enlace con los símbolos y huellas de la herramienta de diseño. Una base de datos con una clave que no conoce se rechaza, y un registro marcado como verificado sin ningún dato se señala y no se exporta.
 
 ---
 
@@ -46,7 +46,7 @@ Cada línea es una parte de este repositorio y la luz dice hasta dónde llega ho
 | Área | Estado | Qué significa aquí |
 |---|---|---|
 | Comprobaciones del repositorio | 🟡 | La comprobación del repositorio, la de las imágenes y las 3 pruebas de la base se ejecutan en el CI y pasan. |
-| Pruebas | 🟡 | Las 210 pruebas del código Rust y las 3 de la base las ejecuta el CI. Usan solo datos hechos por las propias pruebas y los archivos pequeños de `examples/`. Incluyen una simulación con semilla fija de los programas que exportan una lista de piezas, con fallos inyectados y recuperación. |
+| Pruebas | 🟡 | Las 212 pruebas del código Rust y las 3 de la base las ejecuta el CI. Usan solo datos hechos por las propias pruebas y los archivos pequeños de `examples/`. Incluyen una simulación con semilla fija de los programas que exportan una lista de piezas, con fallos inyectados y recuperación. |
 | Hardware real | 🟠 | No se ha ejecutado en ninguna máquina ni placa: nada de aquí se ha probado en hardware. |
 | Función planificada | 🟠 | Escrito: el registro con identidad exacta, la procedencia de cada observación, los conflictos, el estado de confianza, el origen y la licencia, y la importación de una lista de piezas en CSV a un archivo JSON. Sin escribir: otros importadores, el enlace con símbolos y huellas y las hojas de datos. |
 | Requisitos | 🟠 | Los 6 requisitos están en prototipo: hay código y pruebas, solo con datos hechos por las pruebas; ninguno está validado. |

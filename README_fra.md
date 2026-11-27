@@ -19,7 +19,7 @@
 
 ---
 
-**Vérification d'honnêteté - ce qui tourne aujourd'hui :** une bibliothèque Rust et une ligne de commande qui importent une liste de pièces depuis un fichier CSV vers une base JSON conservée comme fichier à côté du projet (`import`, `check-csv`, `list`) et qui trouvent ce qui ne va pas dans une base : identités en double, observations sans source, sources qui divergent, fiches marquées vérifiées alors que quelque chose reste en attente, fiches sans origine ni licence enregistrées ; elles refusent d'exporter des données sans licence et ne remplacent jamais un fichier existant sans ordre explicite. Tout n'est testé que sur des données faites par ses propres tests et sur les petits fichiers de `examples/`. N'existent pas : d'autres formats d'import (seulement le CSV de `docs/CSV_FORMAT.md`), la fusion d'un import dans une base existante et le lien avec les symboles et empreintes de l'outil de conception.
+**Vérification d'honnêteté - ce qui tourne aujourd'hui :** une bibliothèque Rust et une ligne de commande qui importent une liste de pièces depuis un fichier CSV vers une base JSON conservée comme fichier à côté du projet (`import`, `check-csv`, `list`) et qui trouvent ce qui ne va pas dans une base : identités en double, observations sans source, sources qui divergent, fiches marquées vérifiées alors que quelque chose reste en attente, fiches sans origine ni licence enregistrées ; elles refusent d'exporter des données sans licence et ne remplacent jamais un fichier existant sans ordre explicite. Tout n'est testé que sur des données faites par ses propres tests et sur les petits fichiers de `examples/`. N'existent pas : d'autres formats d'import (seulement le CSV de `docs/CSV_FORMAT.md`), la fusion d'un import dans une base existante et le lien avec les symboles et empreintes de l'outil de conception. Une base contenant une clé inconnue est refusée, et un enregistrement marqué comme vérifié sans aucune donnée est signalé et n'est pas exporté.
 
 ---
 
@@ -46,7 +46,7 @@ Chaque ligne est une partie de ce dépôt et le feu dit où elle en est aujourd'
 | Domaine | État | Ce que cela veut dire ici |
 |---|---|---|
 | Contrôles du dépôt | 🟡 | Le contrôle du dépôt, celui des images et les 3 tests de la base tournent dans la CI et réussissent. |
-| Tests | 🟡 | Les 210 tests du code Rust et les 3 de la base sont exécutés par la CI. Ils n'utilisent que des données faites par les tests eux-mêmes et les petits fichiers de `examples/`. Elles incluent une simulation à graine fixe de les programmes qui exportent une liste de pièces, avec pannes injectées et reprise. |
+| Tests | 🟡 | Les 212 tests du code Rust et les 3 de la base sont exécutés par la CI. Ils n'utilisent que des données faites par les tests eux-mêmes et les petits fichiers de `examples/`. Elles incluent une simulation à graine fixe de les programmes qui exportent une liste de pièces, avec pannes injectées et reprise. |
 | Matériel réel | 🟠 | Non exécuté sur une machine ni une carte : rien ici n'a été essayé sur du matériel. |
 | Fonction prévue | 🟠 | Écrit : la fiche à identité exacte, la provenance de chaque observation, les conflits, l'état de confiance, l'origine et la licence, et l'import d'une liste de pièces CSV vers un fichier JSON. Non écrit : d'autres importeurs, le lien avec symboles et empreintes et les fiches techniques. |
 | Exigences | 🟠 | Les 6 exigences sont au stade de prototype : le code et les tests existent, seulement sur des données faites par les tests ; aucune n'est validée. |

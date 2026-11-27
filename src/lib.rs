@@ -34,7 +34,7 @@ pub enum Code {
     NoProvenance,
     /// Two observations of one field disagree.
     Conflict,
-    /// A record marked `verified` still has fields pending review, a conflict, or an observation that is not verified.
+    /// A record marked `verified` holds no data, or still has fields pending review, a conflict, or an observation that is not verified.
     VerifiedWithPending,
     /// A record has no origin (manual or import) or an import does not say where it came from.
     NoOrigin,

@@ -19,7 +19,7 @@
 
 ---
 
-**Honesty check - what actually runs today:** a Rust library and a command line that import a list of parts from a CSV file into a JSON database kept as a file next to the project (`import`, `check-csv`, `list`) and that find what is wrong with a database: duplicate identities, observations without a source, sources that disagree, records marked verified while something is pending, and records without a recorded origin or licence; they refuse to export data without a licence and never replace an existing file without an explicit order. All of it is tested only with data made by its own tests and with the small files of `examples/`. What does not exist: other import formats (only the CSV of `docs/CSV_FORMAT.md`), merging an import into an existing database, and the link with the symbols and footprints of the design tool.
+**Honesty check - what actually runs today:** a Rust library and a command line that import a list of parts from a CSV file into a JSON database kept as a file next to the project (`import`, `check-csv`, `list`) and that find what is wrong with a database: duplicate identities, observations without a source, sources that disagree, records marked verified while something is pending, and records without a recorded origin or licence; they refuse to export data without a licence and never replace an existing file without an explicit order. All of it is tested only with data made by its own tests and with the small files of `examples/`. What does not exist: other import formats (only the CSV of `docs/CSV_FORMAT.md`), merging an import into an existing database, and the link with the symbols and footprints of the design tool. A database with a key it does not know is refused, and a record marked verified that holds no data is reported and not exported.
 
 ---
 
@@ -46,7 +46,7 @@ Each line is one part of this repository and the light says how far it is today.
 | Area | State | What it means here |
 |---|---|---|
 | Repository checks | 🟡 | The repository check, the check of the pictures and the 3 tests of the base run in CI and pass. |
-| Tests | 🟡 | 210 tests of the Rust code and the 3 of the base are run by the CI. They use only data made by the tests themselves and the small files of `examples/`. They include a seeded simulation of the programs that export a list of parts with injected faults and recovery. |
+| Tests | 🟡 | 212 tests of the Rust code and the 3 of the base are run by the CI. They use only data made by the tests themselves and the small files of `examples/`. They include a seeded simulation of the programs that export a list of parts with injected faults and recovery. |
 | Real hardware | 🟠 | Not run on any machine or board: nothing here has been tried on hardware. |
 | Planned function | 🟠 | Written: the record with exact identity, provenance of every observation, conflicts, confidence state, origin and licence, and the import of a CSV list of parts into a JSON file. Not written: other importers, the link with symbols and footprints, and the data sheets. |
 | Requirements | 🟠 | The 6 requirements are at prototype: code and tests exist, only on data made by the tests; none is validated. |
