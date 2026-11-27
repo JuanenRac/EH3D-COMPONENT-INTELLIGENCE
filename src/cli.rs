@@ -42,8 +42,7 @@ fn read_text(path: &Path, limit: u64) -> Result<String, CintError> {
 
 fn print_findings(findings: &[Finding], out: &mut dyn Write) {
     for f in findings {
-        let _ = writeln!(
-            out,
+        let line = format!(
             "{} {} {}{}: {}",
             f.code.as_str(),
             f.manufacturer,
@@ -54,7 +53,22 @@ fn print_findings(findings: &[Finding], out: &mut dyn Write) {
                 .unwrap_or_default(),
             f.message
         );
+        let _ = writeln!(out, "{}", one_line(&line));
     }
+}
+
+/// A text from an input file, fit to print on one line: control characters and the Unicode line and paragraph separators become spaces.
+/// Only what is printed goes through here; what is compared or hashed does not.
+fn one_line(text: &str) -> String {
+    text.chars()
+        .map(|c| {
+            if c.is_control() || matches!(c, '\u{2028}' | '\u{2029}') {
+                ' '
+            } else {
+                c
+            }
+        })
+        .collect()
 }
 
 /// Run the command line with the given arguments (without the program name). Returns the exit code.
@@ -66,7 +80,7 @@ pub fn run(args: &[String], out: &mut dyn Write, err: &mut dyn Write) -> i32 {
             2
         }
         Err(Some(error)) => {
-            let _ = writeln!(err, "error: {error}");
+            let _ = writeln!(err, "error: {}", one_line(&error.to_string()));
             2
         }
     }
@@ -74,7 +88,7 @@ pub fn run(args: &[String], out: &mut dyn Write, err: &mut dyn Write) -> i32 {
 
 fn print_issues(issues: &[Issue], err: &mut dyn Write) {
     for issue in issues {
-        let _ = writeln!(err, "{issue}");
+        let _ = writeln!(err, "{}", one_line(&issue.to_string()));
     }
     let _ = writeln!(err, "# {} problems, nothing was imported", issues.len());
 }
@@ -174,8 +188,7 @@ fn dispatch(
         ["list", _] => {
             let db = load(&args[1])?;
             for c in &db.components {
-                let _ = writeln!(
-                    out,
+                let line = format!(
                     "{} {} [{}] references: {}",
                     c.manufacturer,
                     c.part_number,
@@ -189,6 +202,7 @@ fn dispatch(
                         c.references.join(" ")
                     }
                 );
+                let _ = writeln!(out, "{}", one_line(&line));
             }
             let _ = writeln!(out, "# {} components", db.components.len());
             Ok(0)
@@ -479,5 +493,63 @@ Yageo RC0402FR-074K7L [draft] references: R1\n\
         assert_eq!(crate::cli::run(&args, &mut out, &mut err), 2);
         assert_eq!(std::fs::read_to_string(&database).unwrap(), "kept");
         assert!(String::from_utf8(err).unwrap().contains("no data rows"));
+    }
+
+    #[test]
+    fn names_read_from_the_input_cannot_start_a_line_of_their_own() {
+        let work = tempfile::tempdir().unwrap();
+        let file = |name: &str, text: &str| {
+            let path = work.path().join(name);
+            std::fs::write(&path, text).unwrap();
+            path.to_string_lossy().into_owned()
+        };
+        let call = |list: &[&str]| {
+            let args: Vec<String> = list.iter().map(|s| s.to_string()).collect();
+            let (mut out, mut err) = (Vec::new(), Vec::new());
+            let code = run(&args, &mut out, &mut err);
+            let out = String::from_utf8(out).unwrap();
+            let err = String::from_utf8(err).unwrap();
+            for c in out.chars().chain(err.chars()) {
+                assert!(
+                    c == '\n' || !(c.is_control() || c == '\u{2028}' || c == '\u{2029}'),
+                    "{c:?} in {out}{err}"
+                );
+            }
+            (code, out, err)
+        };
+        let db = file(
+            "db.json",
+            r#"{"components":[{"manufacturer":"Acme\nforged","part_number":"X\r1\u2028","origin":{"kind":"manual"},"fields":{"vcc\nmax":[{"value":"3.6 V","method":"transcribed","source":"a"},{"value":"5 V","method":"transcribed","source":"b"}]}}]}"#,
+        );
+        let (code, out, _) = call(&["check", &db]);
+        assert_eq!(code, 1, "{out}");
+        assert!(out.contains("forged"), "{out}");
+        for line in out.lines() {
+            assert!(
+                line.starts_with("PHOENIX-") || line.starts_with("# "),
+                "{out}"
+            );
+        }
+        let (code, out, _) = call(&["list", &db]);
+        assert_eq!(code, 0, "{out}");
+        assert_eq!(out.lines().count(), 2, "{out}");
+        let parts = file(
+            "parts.csv",
+            "Reference,Value,Package,Manufacturer,MPN,Datasheet,\"x\nforged\"\n",
+        );
+        let (code, _, err) = call(&["check-csv", &parts]);
+        assert_eq!(code, 2, "{err}");
+        assert!(err.contains("forged"), "{err}");
+        for line in err.lines() {
+            assert!(
+                line.starts_with("EH3D-CINT-") || line.starts_with("# "),
+                "{err}"
+            );
+        }
+        let unknown = file("unknown.json", r#"{"x\nforged\u2028":1}"#);
+        let (code, _, err) = call(&["check", &unknown]);
+        assert_eq!(code, 2, "{err}");
+        assert_eq!(err.lines().count(), 1, "{err}");
+        assert!(err.contains("forged"), "{err}");
     }
 }
