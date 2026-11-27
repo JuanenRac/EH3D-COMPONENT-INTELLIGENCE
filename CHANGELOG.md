@@ -8,6 +8,8 @@ All notable changes to this project are documented here.
 - **A record marked verified without any data is refused:** `check` reports it (`PHOENIX-CINT-004`) with the reason and `export` writes nothing, whatever the licence setting.
 - **A CSV without data rows writes nothing:** `import --overwrite` of a file cut down to its header replaced the database with an empty one.
 - **3 more tests** of the Rust code, for the above; the test that expected unknown keys to be dropped now expects the refusal.
+- **A name read from a file can no longer forge a line of the output:** line breaks and control characters in the findings, the lines of `list`, the problems of a CSV and the error messages are printed as spaces. What is compared, hashed and the exit codes do not change.
+- **1 more test** of the Rust code, for the above.
 
 ## [0.0.5] - Repeated fields and input order no longer hide disagreements, and many more tests
 
