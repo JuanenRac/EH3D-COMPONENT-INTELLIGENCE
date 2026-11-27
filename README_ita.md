@@ -46,7 +46,7 @@ Ogni riga è una parte di questo repository e il semaforo dice a che punto è og
 | Area | Stato | Cosa significa qui |
 |---|---|---|
 | Controlli del repository | 🟡 | Il controllo del repository, quello delle immagini e i 3 test della base girano nella CI e passano. |
-| Test | 🟡 | I 209 test del codice Rust e i 3 della base sono eseguiti dalla CI. Usano solo dati prodotti dai test stessi e i piccoli file di `examples/`. Includono una simulazione a seme fisso di i programmi che esportano un elenco di componenti, con guasti iniettati e ripristino. |
+| Test | 🟡 | I 210 test del codice Rust e i 3 della base sono eseguiti dalla CI. Usano solo dati prodotti dai test stessi e i piccoli file di `examples/`. Includono una simulazione a seme fisso di i programmi che esportano un elenco di componenti, con guasti iniettati e ripristino. |
 | Hardware reale | 🟠 | Non eseguito su nessuna macchina né scheda: nulla qui è stato provato su hardware. |
 | Funzione pianificata | 🟠 | Scritto: la scheda con identità esatta, la provenienza di ogni osservazione, i conflitti, lo stato di fiducia, l'origine e la licenza, e l'importazione di un elenco di parti CSV in un file JSON. Non scritto: altri importatori, il collegamento con simboli e impronte e i datasheet. |
 | Requisiti | 🟠 | I 6 requisiti sono a livello di prototipo: codice e test esistono, solo su dati prodotti dai test; nessuno è validato. |

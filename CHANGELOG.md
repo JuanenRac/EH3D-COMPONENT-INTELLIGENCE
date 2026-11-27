@@ -4,6 +4,9 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **A CSV without data rows writes nothing:** `import --overwrite` of a file cut down to its header replaced the database with an empty one.
+- **1 more test** of the Rust code, for the above.
+
 ## [0.0.5] - Repeated fields and input order no longer hide disagreements, and many more tests
 
 - **A field written twice in the database is refused:** the last one took the place of the first in silence, so two sources that disagreed could become one and a record could pass the check.
