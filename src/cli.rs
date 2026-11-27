@@ -210,6 +210,10 @@ fn dispatch(
             let Some(imported) = read_csv(&args[1], &config, err).map_err(Some)? else {
                 return Ok(2);
             };
+            if imported.rows == 0 {
+                let _ = writeln!(err, "# the CSV has no data rows, nothing was written");
+                return Ok(2);
+            }
             let text = imported.database.to_canonical_json().map_err(Some)?;
             if let Err(issue) = write_atomic(Path::new(&args[2]), &text, overwrite) {
                 let _ = writeln!(err, "{issue}");
@@ -453,5 +457,27 @@ Yageo RC0402FR-074K7L [draft] references: R1\n\
         assert_eq!(code, 2);
         assert!(err.contains("cannot read"));
         assert_eq!(call(&["list", "no-such-file.json"]).0, 2);
+    }
+
+    #[test]
+    fn a_csv_cut_down_to_its_header_does_not_replace_a_database() {
+        let work = tempfile::tempdir().unwrap();
+        let csv = work.path().join("parts.csv");
+        let database = work.path().join("db.json");
+        std::fs::write(&csv, "reference,value,package,manufacturer,mpn,datasheet\n").unwrap();
+        std::fs::write(&database, "kept").unwrap();
+        let args: Vec<String> = [
+            "import",
+            csv.to_str().unwrap(),
+            database.to_str().unwrap(),
+            "--overwrite",
+        ]
+        .iter()
+        .map(|a| a.to_string())
+        .collect();
+        let (mut out, mut err) = (Vec::new(), Vec::new());
+        assert_eq!(crate::cli::run(&args, &mut out, &mut err), 2);
+        assert_eq!(std::fs::read_to_string(&database).unwrap(), "kept");
+        assert!(String::from_utf8(err).unwrap().contains("no data rows"));
     }
 }
