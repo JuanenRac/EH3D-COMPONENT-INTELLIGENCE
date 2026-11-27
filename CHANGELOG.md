@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+## [0.0.6] - Unknown keys and empty verified records are refused and output stays on one line
+
 - **A key the database does not know is refused:** it was read and dropped in silence, so a mistyped `pending` let a record pass as verified and the export lost what was written. The message names the key, at every level of the file.
 - **A record marked verified without any data is refused:** `check` reports it (`PHOENIX-CINT-004`) with the reason and `export` writes nothing, whatever the licence setting.
 - **A CSV without data rows writes nothing:** `import --overwrite` of a file cut down to its header replaced the database with an empty one.
